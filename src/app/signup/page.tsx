@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import { signup } from '~/server/signup' 
 import { toast } from 'sonner'
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa"
+import Link from 'next/link';
  
 interface SignUpData {
     username: string,
@@ -48,6 +49,10 @@ export default function Signup() {
                             }} type='submit' whileHover={{scale: 1.05}} whileTap={{scale: 0.9}} 
                             className="px-7 py-2 bg-white text-black font-bold rounded-full border border-zinc-700 cursor-pointer">Sign up</motion.button>
                      </form>
+                     <div className='flex p-1 gap-1 text-sm'>
+                       <p>Already has an account ?</p>
+                       <Link className='text-blue-500 hover:underline hover:underline-offset-2' href={'/signin'}>Sign in</Link>
+                     </div>
                </div>
         </main>
 }

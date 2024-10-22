@@ -18,18 +18,13 @@ declare module "next-auth" {
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
-    jwt: async ({token, user}) => {
-        console.log(token)
-        console.log(user)
-        token.userId = user.id
-        return token
+    jwt: async ({token, user, session}) => {
+       console.log("Jwt callback",{token, user, session})
+       return token
+    },
+    session: async ({session, token ,user}) => {
+      console.log("session callback",{token, user, session})
+      return session
     }
   },
   providers: [
@@ -39,18 +34,29 @@ export const authOptions: NextAuthOptions = {
         email: {label: 'email',type: 'text',placeholder: 'email'},
         password: {label: 'password', type: 'password', placeholder: 'password'}
       },
-       authorize: async ({email, password}: {email: string, password: string}) => {
+       authorize: async (credentials: any) => {
+
+        if (!credentials) {
+          throw new Error("No credentials provided")
+        }
+
+        const {email,password} = credentials
+
         const parsedData = SignInSchema.safeParse({email,password})
         if(!parsedData.success) throw new Error('Invalid Credentials. try again !')
 
         const user = await db.user.findUnique({where: {email}})
-        const isMatch = await bcrypt.compare(password,user?.password || '')     
-        if(!user || !isMatch) throw new Error ('Incorrect credentials')
+        if(!user) throw new Error('User not found. check email !')
+        const isMatch = await bcrypt.compare(password, user.password)     
+        if(!isMatch) throw new Error('Check your password !!!')
 
-        return {id: user.id, username: user.username, email: user.email}
+        return {id: user.id.toString(), username: user.username, email: user.email}
       }
      })
   ],
+  session: {
+    strategy: 'jwt'
+  },
   pages: {
     signIn: '/signin'
   },

@@ -20,15 +20,14 @@ export default function Page() {
     const router = useRouter()
 
     async function OnSubmit(data: SignInData) {
-        const loadId = toast.loading('Signing in...')
+        // const loadId = toast.loading('Signing in...', {duration: 3000})
         const result = await signIn('credentials',{email: data.email, password: data.password, redirect: false})
         console.log(result)
-        toast.dismiss(loadId)
+        // toast.dismiss(loadId)
         if(!result?.error) {
-            router.push('/')
             toast.success('Signed in successfully')
-        }
-        toast.error(result?.error, {duration: 3000})
+            router.push('/')
+        } else toast.error(result?.error, {duration: 3000})
     }
     
     return <main className="w-full min-h-screen flex-center bg-black text-white">
