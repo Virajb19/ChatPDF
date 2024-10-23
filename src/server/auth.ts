@@ -19,11 +19,19 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   callbacks: {
     jwt: async ({token, user, session}) => {
-       console.log("Jwt callback",{token, user, session})
+      //  console.log("Jwt callback",{token, user, session})
+       if(user) {
+         token.name = user.name
+         token.id = token.sub
+       }
        return token
     },
     session: async ({session, token ,user}) => {
-      console.log("session callback",{token, user, session})
+      // console.log("session callback",{token, user, session})
+      if(session && session.user) {
+        session.user.name = token.name
+        session.user.id = token.sub as string
+      }
       return session
     }
   },
@@ -50,12 +58,15 @@ export const authOptions: NextAuthOptions = {
         const isMatch = await bcrypt.compare(password, user.password)     
         if(!isMatch) throw new Error('Check your password !!!')
 
-        return {id: user.id.toString(), username: user.username, email: user.email}
+        // console.log(user)
+
+        return {id: user.id.toString(), name: user.username, email: user.email}
       }
      })
   ],
   session: {
-    strategy: 'jwt'
+    strategy: 'jwt',
+    maxAge: 2 * 24 * 60 * 60
   },
   pages: {
     signIn: '/signin'

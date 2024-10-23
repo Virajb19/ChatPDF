@@ -18,21 +18,19 @@ interface SignUpData {
 export default function Signup() { 
 
   const {register, handleSubmit} = useForm<SignUpData>()
-  const [data,setData] = useState<SignUpData>({username: '', email: '', password: ''})
   const [error,setError] = useState<{username?: string[], email?: string[], password?: string[]} | null | undefined>(null)
 
   const router = useRouter()
 
   async function onSubmit(data: SignUpData) {
-   setData(data)
    const result = await signup(data)
     if(!result?.success && result?.errors) {
-    setError(result?.errors)
+       setError(result?.errors)
     } else if(!result?.success && result?.error) {
-     toast.error(result?.error)
+       toast.error(result?.error)
     } else {
         toast.success(result?.msg)
-        router.push('/')
+        router.push('/signin')
     }
 
   }
