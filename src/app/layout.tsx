@@ -4,6 +4,7 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { Toaster} from 'sonner'
 import Providers from "./providers";
+import LogoutButton from "~/components/LogoutButton";
 
 
 export const metadata: Metadata = {
@@ -19,6 +20,7 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
         <Providers>
+        <LogoutButton />
         {children}
          <Toaster position="top-center" richColors/>
          </Providers>

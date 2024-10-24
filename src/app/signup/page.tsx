@@ -65,7 +65,7 @@ function Input({text, register, errors}: {text: string, register: any, errors: s
      {errors && 
        <div className='text-red-700 text-left flex flex-col p-1 gap-1 text-sm'>
              {errors?.map((err,i) => {
-                return <span key={i}>{err}</span>
+                return <span key={i}>- {err}</span>
              })}
         </div>}
      </div>

@@ -10,6 +10,11 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+enum Role {
+    USER
+    SYSTEM
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   username  String   @unique
@@ -19,11 +24,26 @@ model User {
   updatedAt DateTime @updatedAt
   lastLogin DateTime @default(now())
   token String? @unique
+  ProfilePicture String? @default("")
   chats Chat[]
 }
 
 model Chat {
     id String @id @default(cuid())
+    pdfName String
+    pdfURL String
+    createdAt DateTime @default(now())
+    fileKey String
     userId Int
     user User @relation(fields: [userId], references: [id])
+    messages Message[]
+}
+
+model Message {
+    id String @id @default(cuid())
+    chatId String
+    chat Chat @relation(fields: [chatId], references: [id])
+    content String
+    createdAt DateTime @default(now())
+    role Role @default(USER)
 }

@@ -43,7 +43,7 @@ export const authOptions: NextAuthOptions = {
         password: {label: 'password', type: 'password', placeholder: 'password'}
       },
        authorize: async (credentials: any) => {
-
+    try {
         if (!credentials) {
           throw new Error("No credentials provided")
         }
@@ -52,15 +52,18 @@ export const authOptions: NextAuthOptions = {
 
         const parsedData = SignInSchema.safeParse({email,password})
         if(!parsedData.success) throw new Error('Invalid Credentials. try again !')
-
+        // PRISMA ERROR WITHOUT TRY CATCH
         const user = await db.user.findUnique({where: {email}})
         if(!user) throw new Error('User not found. check email !')
         const isMatch = await bcrypt.compare(password, user.password)     
         if(!isMatch) throw new Error('Check your password !!!')
 
-        // console.log(user)
-
         return {id: user.id.toString(), name: user.username, email: user.email}
+} catch(e) {
+  console.error(e)
+  if(e instanceof Error) throw new Error(e.message)
+  else { throw new Error('Something went wrong !!!')}
+}
       }
      })
   ],
