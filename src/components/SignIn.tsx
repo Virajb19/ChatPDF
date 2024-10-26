@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa"
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 interface SignInData {
     email: string,
@@ -35,6 +36,10 @@ export default function SignIn() {
                             <motion.button type='submit' whileHover={{scale: 1.05}} whileTap={{scale: 0.9}} 
                             className="px-7 py-2 bg-white text-black font-bold rounded-full border border-zinc-700 cursor-pointer">Sign in</motion.button>
                      </form>
+                     <div className='flex p-1 gap-1 text-sm'>
+                         <p className=''>Don't have an account ?</p>
+                         <Link className='text-blue-500 hover:underline hover:underline-offset-2 duration-100' href='/signup'>Sign up</Link>
+                     </div>
                </div>
         </main>
 }

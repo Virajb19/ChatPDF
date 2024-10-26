@@ -1,13 +1,14 @@
 'use client'
 
 import {motion} from 'framer-motion'
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { signup } from '~/server/signup' 
+import { signup } from '~/app/actions/signup' 
 import { toast } from 'sonner'
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa"
 import Link from 'next/link';
+import { useSession } from 'next-auth/react'
  
 interface SignUpData {
     username: string,
@@ -16,6 +17,12 @@ interface SignUpData {
 }
 
 export default function Signup() { 
+
+  const session = useSession()
+  // if(status === 'unauthenticated') redirect('/')
+ if(session?.data) {
+     redirect('/')
+ }
 
   const {register, handleSubmit} = useForm<SignUpData>()
   const [error,setError] = useState<{username?: string[], email?: string[], password?: string[]} | null | undefined>(null)
@@ -49,7 +56,7 @@ export default function Signup() {
                      </form>
                      <div className='flex p-1 gap-1 text-sm'>
                        <p>Already has an account ?</p>
-                       <Link className='text-blue-500 hover:underline hover:underline-offset-2' href={'/signin'}>Sign in</Link>
+                       <Link className='text-blue-500 hover:underline hover:underline-offset-2' href='/signin'>Sign in</Link>
                      </div>
                </div>
         </main>

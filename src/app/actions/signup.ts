@@ -2,7 +2,8 @@
 
 import { signUpSchema } from "~/lib/zod"
 import bcrypt from 'bcrypt'
-import { db } from "./db"
+import { db } from "~/server/db"
+
 
 interface formData {
     username: string

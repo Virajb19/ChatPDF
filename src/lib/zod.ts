@@ -12,3 +12,9 @@ export const SignInSchema = z.object({
     password: z.string().min(8, {message: 'Password must be atleast 8 letters long'}).max(15)
               .regex(/^(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/, {message: 'Password must contain atleast one special char and one number'})
 })
+
+export const createChatSchema = z.object({
+    pdfName: z.string(),
+    pdfURL: z.string().optional(),
+    fileKey: z.string()
+})

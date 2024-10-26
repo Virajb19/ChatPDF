@@ -9,7 +9,7 @@ import Spinner from '~/components/Spinner';
 
 export default function HomePage() {
 
- const { data:session, status } = useSession()
+ const { data: session, status } = useSession()
  const isAuth = !!session
 
  const fileRef = useRef<HTMLInputElement | null>(null)
@@ -27,22 +27,23 @@ export default function HomePage() {
   }
 }
 
-if(status === 'loading') return <Spinner />
-
      return <main className="w-full min-h-screen flex-center bg-gradient-to-r from-rose-200 to-teal-200 text-black">
-               <div id='homepage' className="flex flex-col p-1 gap-1 items-center">
-                 <div id='avatar' className='flex p-1 gap-2 items-center'>
-                  <h1 className="mb:text-3xl tb:text-c-5xl font-medium mb:tracking-tighter">Chat with any PDF</h1>
-                  {isAuth && <div className='flex'>
-                  <Avatar onClick={() => fileRef.current?.click()} className='cursor-pointer' size='50' round src={avatarURL} />
-                  <input onChange={handleFileChange} type='file' accept='image/*' ref={fileRef} style={{display: 'none'}}/>
-                   </div>
-                  }
+             {status === 'loading' ? <Spinner color='text-black'/> : 
+             
+                <div id='homepage' className="flex flex-col p-1 gap-1 items-center">
+                <div id='avatar' className='flex p-1 gap-2 items-center'>
+                 <h1 className="mb:text-3xl tb:text-c-5xl font-medium mb:tracking-tighter">Chat with any PDF</h1>
+                 {isAuth && <div className='flex'>
+                 <Avatar onClick={() => fileRef.current?.click()} className='cursor-pointer' size='50' round src={avatarURL} />
+                 <input onChange={handleFileChange} type='file' accept='image/*' ref={fileRef} style={{display: 'none'}}/>
                   </div>
-                  {isAuth && <button className='flex gap-2 items-center px-4 py-2 bg-black text-white rounded-lg font-semibold group'>Go to chats<span className='group-hover:translate-x-1.5 duration-200'><ArrowRightToLine /></span></button>}
-                  <p className='max-w-xl lg:text-xl mt-2 text-center'>Join millions of students, researchers and professinals to
-                  instantly anwer questions and understand research with AI</p>
-                  {isAuth ? <div className='sm:w-[60%] w-[90%]'><FileUpload /></div> : <Link href={'/signin'}><button className='flex gap-2 items-center px-4 py-2 mt-3 min-w-1/2 bg-black text-white rounded-lg font-semibold text-sm hover:gap-4 transition-all'>Login to get started !<span><LogIn /></span></button></Link>}
-               </div>
+                 }
+                 </div>
+                 {isAuth && <button className='flex gap-2 items-center px-4 py-2 bg-black text-white rounded-lg font-semibold group'>Go to chats<span className='group-hover:translate-x-1.5 duration-200'><ArrowRightToLine /></span></button>}
+                 <p className='max-w-xl lg:text-xl mt-2 text-center'>Join millions of students, researchers and professionals to
+                 instantly anwer questions and understand research with AI</p>
+                 {isAuth ? <div className='sm:w-[60%] w-[90%]'><FileUpload /></div> : <Link href={'/signup'}><button className='flex gap-2 items-center px-4 py-2 mt-3 min-w-1/2 bg-black text-white rounded-lg font-semibold text-sm hover:gap-4 transition-all'>Sign up to get started !<span><LogIn /></span></button></Link>}
+              </div>
+             }
         </main>
 }

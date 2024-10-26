@@ -5,6 +5,7 @@ import { type Metadata } from "next";
 import { Toaster} from 'sonner'
 import Providers from "./providers";
 import LogoutButton from "~/components/LogoutButton";
+import NextTopLoader from 'nextjs-toploader';
 
 
 export const metadata: Metadata = {
@@ -20,9 +21,10 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
         <Providers>
-        <LogoutButton />
-        {children}
+         <LogoutButton />
          <Toaster position="top-center" richColors/>
+         <NextTopLoader height={4} color="#9b1136" showSpinner={false}/>
+         {children}
          </Providers>
       </body>
     </html>

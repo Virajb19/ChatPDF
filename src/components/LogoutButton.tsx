@@ -3,12 +3,14 @@
 import { LogOut } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
 import { toast } from 'sonner';
+import { usePathname } from 'next/navigation';
 
 export default function LogoutButton() {
 
  const session = useSession()
+ const pathname = usePathname();
 
- if(!session || !session.data) return null
+ if(!session || !session.data || pathname === '/404') return null
 
     return <button onClick={async () => {
       try {
