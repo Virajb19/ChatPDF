@@ -25,7 +25,7 @@ export async function downloadFromS3(file_key: string): Promise<string | null> {
         fs.writeFileSync(file_name, buffer)
         return file_name
      } catch(error) {
-        console.error(error)
+        console.error('Error downloading from S3 ' + error)
         return null
      }
 }

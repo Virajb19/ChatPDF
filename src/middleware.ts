@@ -2,7 +2,7 @@ import { withAuth } from 'next-auth/middleware'
 import { NextResponse } from 'next/server'
 
 export const config = {
-    matcher: ['/api/create-chat']
+    matcher: ['/api/create-chat', '/chats']
 }
 
 export default withAuth((req) => {

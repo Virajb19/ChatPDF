@@ -10,7 +10,7 @@ export default function LogoutButton() {
  const session = useSession()
  const pathname = usePathname();
 
- if(!session || !session.data || pathname === '/404') return null
+ if(!session || !session.data || pathname.startsWith('/chats')) return null
 
     return <button onClick={async () => {
       try {

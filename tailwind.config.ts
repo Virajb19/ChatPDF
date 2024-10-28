@@ -1,3 +1,4 @@
+import { plugins } from "postcss.config.cjs";
 import { fontFamily } from "tailwindcss/defaultTheme";
 
 export default {
@@ -28,8 +29,10 @@ export default {
 			'c-8xl': ['clamp(6rem, 9vw + 0.5rem, 7rem)', '1.5'],         // 8XL
 			'c-9xl': ['clamp(8rem, 10vw + 0.5rem, 9rem)', '1.5'],        // 9XL
 		  },
-  		
   		}
-  	}
+  	},
+	plugins: [
+		require('tailwind-scrollbar')
+	]
   }
 

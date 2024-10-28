@@ -6,11 +6,12 @@ import { useMutation } from "@tanstack/react-query";
 import axios from 'axios'
 import Spinner from "./Spinner";
 import { useState } from "react";
-import { uploadS3ToPinecone } from "~/lib/pincone";
+import { useRouter } from "next/navigation";
 
 export default function FileUpload() {
 
     const [uploading, setUploading] = useState(false)
+    const router = useRouter()
 
  const {mutate, isPending} = useMutation({
     mutationFn: async ({fileKey, fileName} : {fileKey: string, fileName: string}) => {
@@ -35,10 +36,12 @@ export default function FileUpload() {
         toast.error('Something went wrong. Try again !')
         return
      }
-        mutate(data, {onSuccess: (data) => console.log(data), onError: (err) => toast.error('Error creating chat')})
+        mutate(data, {onSuccess: ({chatId}) => {
+            toast.success('Chat created successfully')
+            router.push(`/chats/${chatId}`)
+        }, onError: (err) => toast.error('Error creating chat')})
         toast.success('File uploaded successfully')
         setUploading(false)
-        await uploadS3ToPinecone(data.fileKey)
     }
  })
 

@@ -6,6 +6,7 @@ import { Toaster} from 'sonner'
 import Providers from "./providers";
 import LogoutButton from "~/components/LogoutButton";
 import NextTopLoader from 'nextjs-toploader';
+import { Lexend } from 'next/font/google';
 
 
 export const metadata: Metadata = {
@@ -14,11 +15,17 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
+const lexend = Lexend({
+  subsets: ['latin'],
+  weight: ['400', '700'], // adjust weights as needed
+});
+
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${GeistSans.variable}`}>
+    <html lang="en" className={lexend.className}>
       <body>
         <Providers>
          <LogoutButton />

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { createChatSchema } from "~/lib/zod";
 import { getToken } from "next-auth/jwt"
 import { db } from "~/server/db";
+import { uploadS3ToPinecone } from "~/lib/pincone";
+import { getS3Url } from "~/lib/s3";
 
 export async function POST(req: NextRequest) {
     try {
@@ -13,9 +15,11 @@ export async function POST(req: NextRequest) {
         if(!token) return NextResponse.json({msg: 'Unauthorized'}, {status: 401})
         const userId = parseInt(token.sub as string)
 
-        const chat = await db.chat.create({data: {pdfName, fileKey, userId}})
+        const chat = await db.chat.create({data: {pdfName, fileKey, pdfURL: getS3Url(fileKey) ,userId}})
 
-        return NextResponse.json({msg: 'Chat created successfully',}, {status: 200})
+        await uploadS3ToPinecone(fileKey)
+
+        return NextResponse.json({msg: 'Chat created successfully', chatId: chat.id}, {status: 200})
     } catch(e) {
         console.error(e)
         return NextResponse.json({msg: 'Something went wrong !'}, {status: 500})
