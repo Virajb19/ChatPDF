@@ -10,4 +10,4 @@ export default withAuth((req) => {
     if(!token) return NextResponse.redirect(new URL('/signin', req.url))
     //@ts-ignore
     req.userId = parseInt(token.sub)
-})
+}) 

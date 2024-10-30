@@ -1,11 +1,13 @@
 'use client'
+
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import Avatar from 'react-avatar'
 import { LogIn, ArrowRightToLine } from 'lucide-react';
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import FileUpload from '~/components/FileUpload';
 import Spinner from '~/components/Spinner';
+import { checkSubscription } from '~/lib/subscription';
 
 export default function HomePage() {
 
@@ -14,7 +16,15 @@ export default function HomePage() {
 
  const fileRef = useRef<HTMLInputElement | null>(null)
  const [avatarURL, setAvatarURL] = useState<string>('https://imgs.search.brave.com/L3QH_L8tiQCkvsAiK-xmjN_tlyqcBzdBdRAs8RHlNmU/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA3LzAzLzg2LzEx/LzM2MF9GXzcwMzg2/MTExNF83WXhJUG5v/SDhOZm1ieUVmZk96/aWFYeTBFTzFOcFJI/RC5qcGc')
-
+ 
+ const [isPro,setIsPro] = useState<Boolean>(false)
+ useEffect(() => {
+  async function main() {
+     const isPro = await checkSubscription()
+     setIsPro(isPro)
+  }   
+  main()
+ },[isAuth])
 
  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
   const file = e.target.files?.[0]

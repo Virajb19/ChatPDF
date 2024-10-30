@@ -12,7 +12,7 @@ datasource db {
 
 enum Role {
     USER
-    SYSTEM
+    ASSISTANT
 }
 
 model User {
@@ -26,6 +26,7 @@ model User {
   token String? @unique
   ProfilePicture String? @default("")
   chats Chat[]
+  subscription Subscription?
 }
 
 model Chat {
@@ -46,4 +47,14 @@ model Message {
     content String
     createdAt DateTime @default(now())
     role Role @default(USER)
+}
+
+model Subscription {
+    id String @id @default(cuid())
+    userId Int @unique
+    user User @relation(fields: [userId], references: [id])
+    stripeCustomerId String @unique
+    stripeSubscriptionId String @unique
+    stripePriceId String
+    stripeCurrentPeriodEnd DateTime
 }

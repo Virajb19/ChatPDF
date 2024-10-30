@@ -4,7 +4,7 @@ import {motion} from 'framer-motion'
 import { redirect, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { signup } from '~/app/actions/signup' 
+import { signup } from '~/actions/signup' 
 import { toast } from 'sonner'
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa"
 import Link from 'next/link';

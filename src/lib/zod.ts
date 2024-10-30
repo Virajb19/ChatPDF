@@ -18,3 +18,8 @@ export const createChatSchema = z.object({
     pdfURL: z.string().optional(),
     fileKey: z.string()
 })
+
+export const createMessageSchema = z.object({
+    role: z.enum(['user','assistant']),
+    content: z.string().min(1, {message: 'Enter atleast one letter'})
+})

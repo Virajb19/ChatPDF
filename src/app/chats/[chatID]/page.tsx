@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation"
+import ChatComponent from "~/components/ChatComponent"
 import ChatSideBar from "~/components/ChatSideBar"
 import PDFViewer from "~/components/PDFViewer"
+import Spinner from "~/components/Spinner"
 import { getServerAuthSession } from "~/server/auth"
 import { db } from "~/server/db"
 
@@ -15,8 +17,13 @@ export default async function ChatPage({ params : { chatID }} : { params: { chat
   const current_chat = chats.find(chat => chat.id === chatID)
   if(!current_chat) return redirect('/')
 
+  const isLoading = !current_chat?.pdfURL
+
     return <main className="w-full min-h-screen flex gap-1 text-white">
               <ChatSideBar chats={chats} chatID={chatID}/>
-              <PDFViewer pdfURL={current_chat.pdfURL as string}/>
+            <div className="min-h-screen w-1/2 flex-center">
+            {isLoading ? <Spinner color="text-black"/> : <PDFViewer pdfURL={current_chat?.pdfURL || ""}/>}           
+              </div>
+              <ChatComponent chatID={chatID}/>
         </main>
 }
