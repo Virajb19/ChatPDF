@@ -21,16 +21,16 @@ export default function ChatSideBar({chats, chatID} : { chats: chat[], chatID: s
     const [loading,setLoading] = useState(false)
 
     async function handleSubscription() {
+      const loadID = toast.loading('Directing to stripe payment page...')
        try {
          setLoading(true)
-        const loadID = toast.loading('Directing to stripe payment page...')
         const response = await axios.get('/api/stripe')
         window.location.href = response.data.url
+      } catch(error) {
+        toast.error('Something went wrong. Try again !!!')
+      } finally {
+        setLoading(false)
         toast.dismiss(loadID)
-       } catch(error) {
-         toast.error('Something went wrong !!!')
-       } finally {
-         setLoading(false)
        }
     }
 
