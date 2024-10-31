@@ -1,3 +1,5 @@
+'use client'
+
 import { useDropzone } from "react-dropzone"
 import { Inbox } from 'lucide-react';
 import { toast } from "sonner";

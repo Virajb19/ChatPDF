@@ -6,6 +6,7 @@ import MessageList from './MessageList'
 import { motion } from 'framer-motion'
 import { getMessages } from '~/actions/getMessages'
 import { useEffect, useState } from 'react'
+// import { Message } from '@prisma/client'
 
 export default function ChatComponent({chatID}: {chatID: string}) {
 
@@ -13,9 +14,12 @@ export default function ChatComponent({chatID}: {chatID: string}) {
 
   useEffect(() => {
     async function main() {
-        let messages: any = await getMessages(chatID)
-        // messages = messages.map(msg => ({...msg, role: msg.role.toLowerCase() as Role}))
-        setInitialMessages(messages)
+        let messages = await getMessages(chatID)
+        messages = messages.map((msg) => ({
+          ...msg,
+          role: msg.role.toLowerCase() as 'user' | 'system' | 'assistant' | 'data' | 'tool' | 'function'
+        }))       
+       setInitialMessages(messages)
     }
     main()
   }, [chatID])
