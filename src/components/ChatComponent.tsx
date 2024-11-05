@@ -14,8 +14,8 @@ export default function ChatComponent({chatID}: {chatID: string}) {
 
   useEffect(() => {
     async function main() {
-        let messages = await getMessages(chatID)
-        messages = messages.map((msg) => ({
+        let messages: any = await getMessages(chatID)
+        messages = messages.map((msg: any) => ({
           ...msg,
           role: msg.role.toLowerCase() as 'user' | 'system' | 'assistant' | 'data' | 'tool' | 'function'
         }))       
@@ -28,7 +28,10 @@ export default function ChatComponent({chatID}: {chatID: string}) {
   const { input, handleSubmit, handleInputChange, messages} = useChat({ 
     api: '/api/chat',
     body: {chatID},
-    initialMessages
+    initialMessages,
+    onFinish(message, options) {
+      console.log('assistant reply: ',message)
+    },
  })
 
     return <main className="relative text-black border-l-2 border-slate-400 p-1 w-1/3">

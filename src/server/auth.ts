@@ -58,6 +58,8 @@ export const authOptions: NextAuthOptions = {
         const isMatch = await bcrypt.compare(password, user.password)     
         if(!isMatch) throw new Error('Check your password !!!')
 
+        await db.user.update({where: {id: user.id}, data: {lastLogin: new Date()}})
+
         return {id: user.id.toString(), name: user.username, email: user.email}
 } catch(e) {
   console.error(e)
