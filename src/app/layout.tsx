@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 const lexend = Lexend({
   subsets: ['latin'],
-  weight: ['400', '700'], // adjust weights as needed
+  weight: ['400', '700'], 
 });
 
 

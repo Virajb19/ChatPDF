@@ -1,4 +1,3 @@
-import { plugins } from "postcss.config.cjs";
 import { fontFamily } from "tailwindcss/defaultTheme";
 
 export default {
