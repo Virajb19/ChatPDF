@@ -1,6 +1,6 @@
 'use server'
 
-import { signUpSchema } from "~/lib/zod"
+import { SignUpSchema } from "~/lib/zod"
 import bcrypt from 'bcrypt'
 import { db } from "~/server/db"
 
@@ -13,7 +13,7 @@ interface formData {
 
 export async function signup(formData: formData) {
  try {
-    const parsedData = signUpSchema.safeParse(formData)
+    const parsedData = SignUpSchema.safeParse(formData)
     if(!parsedData.success) return {success: false, errors: parsedData.error.flatten().fieldErrors}
     const {username, email, password} = parsedData.data
 

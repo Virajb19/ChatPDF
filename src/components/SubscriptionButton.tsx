@@ -5,7 +5,7 @@ import { useState } from "react"
 import { toast } from "sonner"
 import { twMerge } from "tailwind-merge"
 
-export default function SubscriptionButton({isPro}: {isPro: Boolean}) {
+export default function SubscriptionButton({isPro}: {isPro: boolean}) {
 
     const [loading,setLoading] = useState<boolean>(false)
 

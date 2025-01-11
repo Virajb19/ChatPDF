@@ -15,15 +15,26 @@ enum Role {
     ASSISTANT
 }
 
+enum OauthProvider {
+  GOOGLE
+  GITHUB
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   username  String   @unique
   email     String   @unique
-  password  String 
+  password  String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   lastLogin DateTime @default(now())
-  token String? @unique
+
+  OauthProvider OauthProvider?
+  OauthId String?
+
+  isPro Boolean @default(false)
+
   ProfilePicture String? @default("")
   chats Chat[]
   subscription Subscription?

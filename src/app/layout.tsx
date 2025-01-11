@@ -1,12 +1,10 @@
 import "~/styles/globals.css";
 
 import { type Metadata } from "next";
-import { Toaster} from 'sonner'
 import Providers from "./providers";
-import LogoutButton from "~/components/LogoutButton";
 import NextTopLoader from 'nextjs-toploader';
-import { Lexend } from 'next/font/google';
-
+import { DM_Sans } from 'next/font/google';
+import Navbar from "~/components/Navbar";
 
 export const metadata: Metadata = {
   title: "ChatPDF Reader",
@@ -14,22 +12,20 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-const lexend = Lexend({
+const sans = DM_Sans({
   subsets: ['latin'],
-  weight: ['400', '700'], 
-});
-
+  weight: ['500','800']
+})
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={lexend.className}>
+    <html lang="en" className={sans.className}>
       <body>
         <Providers>
-         <LogoutButton />
-         <Toaster position="top-center" richColors/>
-         <NextTopLoader height={4} color="#9b1136" showSpinner={false}/>
+          <Navbar />
+         <NextTopLoader height={4} color="#22c55e" showSpinner={false}/>
          {children}
          </Providers>
       </body>

@@ -3,7 +3,7 @@
 import { useDropzone } from "react-dropzone"
 import { Inbox } from 'lucide-react';
 import { toast } from "sonner";
-import { uploadToS3 } from "~/lib/s3";
+import { uploadFile } from "~/lib/s3";
 import { useMutation } from "@tanstack/react-query";
 import axios from 'axios'
 import Spinner from "./Spinner";
@@ -33,8 +33,8 @@ export default function FileUpload() {
      }
      setUploading(true)
     //  await new Promise(res => setTimeout(res,10000))
-     const data = await uploadToS3(file)
-     if(!data || !data?.fileKey || !data.fileName) {
+     const data = await uploadFile(file)
+     if(!data || !data?.path || !data.fullPath) {
         toast.error('Something went wrong. Try again !')
         return
      }
