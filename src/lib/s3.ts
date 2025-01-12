@@ -1,6 +1,5 @@
-import { v4 as uuid} from 'uuid'
-import { Client, Storage, UploadProgress } from "appwrite";
-import { toast } from 'sonner';
+import { Client, Storage } from "appwrite";
+import { toast } from "sonner";
 
 const client = new Client()
     .setEndpoint('https://cloud.appwrite.io/v1')
@@ -10,14 +9,30 @@ const storage = new Storage(client);
 
 export async function uploadFile(file: File | undefined) {
 
-    if(!file) return
+    if(!file) throw new Error('File is undefined')
 
     const fileKey = Date.now().toString() + "_" + file.name.replace(' ', '-')
  
-try {
-    const res = await storage.createFile('6782148a002e26893ddb', fileKey, file, [] ,(progress) => console.log(progress.progress))
-    } catch(err) {
-        console.error(err)
+    const res = await storage.createFile('6782148a002e26893ddb', fileKey.slice(0,15) , file, [] ,(progress) => console.log(progress.progress))
+    console.log(res)
+    return { fileName: res.name, fileKey}
+}
+
+export const getFileURL = (fileKey: string) => storage.getFilePreview('6782148a002e26893ddb', fileKey)
+
+export async function deleteAllFiles(bucketId: string) {
+    try {
+        const files = await storage.listFiles(bucketId);
+        
+        for (const file of files.files) {
+            await storage.deleteFile(bucketId, file.$id);
+            toast.success(`Deleted file: ${file.name}`);
+        }
+
+        toast.success('All files deleted successfully!');
+    } catch (error) {
+        toast.error('Error deleting files:')
+        console.error(error)
     }
 }
 

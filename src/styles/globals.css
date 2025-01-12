@@ -20,12 +20,12 @@ h3 {
 }
 
 .input-style {
-  @apply outline-none px-4 py-2 bg-transparent placeholder:text-sm rounded-xl border focus:ring-2 focus:ring-blue-600 focus:border-transparent duration-200
+  @apply outline-none px-4 py-2 bg-transparent placeholder:text-sm rounded-xl border focus:ring-2 focus:ring-green-600 focus:border-transparent duration-200
 }
 
-.scrollbar {
+/* .scrollbar {
   @apply scrollbar-thin scrollbar-thumb-slate-700 hover:scrollbar-thumb-slate-600 scrollbar-corner-transparent scrollbar-track-transparent
-}
+} */
 
 .wrapper {
   @apply h-full w-full max-w-7xl px-4 py-4 md:px-12 lg:mx-auto xl:max-w-[90rem];
@@ -106,14 +106,14 @@ body {
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%}
 }
-/* @layer base {
+@layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
   }
-} */
+}
 
 ::-webkit-scrollbar {
   width: 5px;

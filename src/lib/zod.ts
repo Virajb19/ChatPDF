@@ -14,12 +14,9 @@ export const SignInSchema = z.object({
 })
 
 export const createChatSchema = z.object({
-    pdfName: z.string(),
-    pdfURL: z.string().optional(),
+    fileName: z.string(),
+    fileURL: z.string().optional(),
     fileKey: z.string()
 })
 
-export const createMessageSchema = z.object({
-    role: z.enum(['user','assistant']),
-    content: z.string().min(1, {message: 'Enter atleast one letter'})
-})
+export const createMessageSchema = z.object({ message: z.string().min(1, { message: 'Enter a Prompt!'})})

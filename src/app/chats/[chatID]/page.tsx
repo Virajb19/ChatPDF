@@ -11,7 +11,7 @@ export default async function ChatPage({ params : { chatID }} : { params: { chat
    const session = await getServerAuthSession()
    if(!session?.user) return redirect('/signin')
 
-  const chats = await db.chat.findMany({where: {userId: parseInt(session?.user.id)}})
+  const chats = await db.chat.findMany({where: {userId: session.user.id}})
   if(!chats) return redirect('/')
 
   const current_chat = chats.find(chat => chat.id === chatID)

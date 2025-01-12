@@ -15,25 +15,26 @@ try {
        vector: embeddings,
        includeMetadata: true,
    })
-    return queryResult.matches || []
+    return queryResult.matches
   } catch(error) {
     console.error('Error while querying embeddings', error)
+    return []
   }
 }
-
 
 export async function getContext(query: string, fileKey: string) {
 try{
      const queryEmbeddings = await getEmbeddings(query)
      const matches = await getMatchingsFromEmbeddings(queryEmbeddings, fileKey)
       
-     const qualifyingDocs = matches?.filter(match => match.score && (match.score > 0.3))
+     const qualifyingDocs = matches.filter(match => match.score && (match.score > 0.3))
      type Metadata = { text: string, pageNumber: number}
 
-     //Extract text from metadata
-     const docs = qualifyingDocs?.map(match => (match.metadata as Metadata).text)
+     const docs = qualifyingDocs.map(match => (match.metadata as Metadata).text)
      return docs?.join('\n').substring(0,3000)
   } catch(error) {
     console.error('Error while getting context', error)
+    return ''
   }
 }
+

@@ -1,12 +1,13 @@
 
 import { Pinecone } from '@pinecone-database/pinecone';
-import { downloadFromS3 } from './s3-server';
+import { downloadFile } from './s3-server';
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { Document, RecursiveCharacterTextSplitter} from '@pinecone-database/doc-splitter'
 import { getEmbeddings } from './embeddings';
 import md5 from 'md5'
 import { Vector } from '@pinecone-database/pinecone/dist/pinecone-generated-ts-fetch/db_data';
 import { convertToASCII } from './utils';
+import fs from 'fs'
 
 type PDFDocument = {
     pageContent: string;
@@ -37,12 +38,12 @@ export async function getPineconeClient() {
     return pc
 }
 
-export async function uploadS3ToPinecone(file_key: string) {
-
-     const file_name = await downloadFromS3(file_key)
+export async function uploadFileToPinecone(fileKey: string) {
+     console.log(fileKey)
+     const fileName = await downloadFile(fileKey)
 
 try {
-       const loader = new PDFLoader(file_name as string)
+       const loader = new PDFLoader(fileName as string)
        const pages = (await loader.load()) as PDFDocument[]
        
        const documents = await Promise.all(pages.map(page => prepareDocument(page)))
@@ -51,12 +52,17 @@ try {
 
        const pc = await getPineconeClient()
        const pineconeIndex = pc.index('chatpdf')
-       const namespace = convertToASCII(file_key)
+       const namespace = convertToASCII(fileKey)
       
-      pineconeIndex.namespace(namespace).upsert(vectors as any)
+      await pineconeIndex.namespace(namespace).upsert(vectors as any)
+
+      fs.unlink(fileName, (err) => {
+         console.error(err)
+         throw new Error('Error deleting file')
+      })
 
 } catch(error) {
-        console.error('Error occured in pincone.ts \n' + error)
+        console.error('Error occured while uploading to Pinecone \n' + error)
      }
 }
 
@@ -82,8 +88,6 @@ export async function embedDocument(doc: Document) {
      try {
         const embeddings = await getEmbeddings(doc.pageContent)
         const hash = md5(doc.pageContent)
-
-        // console.log(doc.metadata)
 
         return {id: hash, values: embeddings, metadata: { text: doc.metadata.text, pageNumber: doc.metadata.pageNumber}} as Vector
        
