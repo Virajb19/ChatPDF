@@ -2,8 +2,14 @@ import { useEffect, useRef } from "react";
 import { twMerge } from "tailwind-merge";
 import { Message } from 'ai'
 import { motion } from 'framer-motion'
+import { Bot, User } from 'lucide-react'
+import { useSession } from "next-auth/react";
+import Image from "next/image";
 
-export default function MessageList({messages} : { messages: Message[]}) {
+export default function MessageList({messages, isLoading} : { messages: Message[], isLoading: boolean}) {
+
+  const {data: session, status} = useSession()
+  const user = session?.user
 
   const divRef = useRef<HTMLDivElement | null>(null)
 
@@ -11,11 +17,40 @@ export default function MessageList({messages} : { messages: Message[]}) {
      if(divRef.current) divRef.current.scrollIntoView({ behavior: 'smooth'})
   }, [messages])
 
-    return <div className="flex flex-col p-1 grow gap-3 max-h-[43rem] overflow-y-scroll scrollbar-none text-xs border-t border-slate-500">
+  useEffect(() => {
+     const messageContainer = document.getElementById('message-container')
+     if(messageContainer) {
+        messageContainer.scrollTo({
+          top: messageContainer.scrollHeight,
+          behavior: 'smooth'
+        })
+     }
+  }, [messages])
+
+    return <div id="message-container" className="flex flex-col p-2 grow gap-3 max-h-[43rem] overflow-y-scroll text-sm border-t border-slate-500">
                {messages.map((message,i) => { 
-                 return <p key={i} className={twMerge("w-fit ml-2 self-end shadow-sm shadow-black font-semibold text-left p-2 rounded-lg bg-[#5602F0] text-white max-w-1/2 ", 
-                  message.role === "assistant" && "self-start mr-2 bg-transparent text-black border border-gray-600 shadow-md shadow-black whitespace-pre-wrap")}>{message.content}</p>
+                 return <div className={twMerge("flex items-start gap-2", message.role === "user" && 'flex-row-reverse items-center')}>
+                  {message.role === 'assistant' ? (
+                      <span className="p-2 bg-green-800 rounded-full"> <Bot /> </span>
+                  ) : user?.image ?  (
+                     <Image src={user.image} alt="user" width={40} height={40} className="rounded-full"/>
+                  ) : ( 
+                     <div className="p-2 flex-center size-10 rounded-full bg-gradient-to-b from-green-400 to-green-700">
+                       <User className="size-6" />
+                  </div>                 
+                )}
+                  <motion.p key={i} initial={{opacity: 0, scale: 0.8}} animate={{opacity:1, scale: 1}} transition={{duration: 0.4, type: 'spring', bounce: 0.4}}
+                       className={twMerge("w-fit mr-2 self-end shadow-sm shadow-black font-semibold text-left p-2 rounded-3xl bg-green-700 max-w-1/2 ", 
+                       message.role === "assistant" && "self-start mr-10 p-3 bg-white/20 border border-gray-600 whitespace-pre-wrap")}>
+                       {message.content}
+                     </motion.p>
+                  </div>
                })}
+               {isLoading && (
+                  <p className="italic font-bold text-gray-500 text-lg animate-pulse">
+                     Generating...
+                  </p>
+               )}
               <div ref={divRef} />
         </div>
 }

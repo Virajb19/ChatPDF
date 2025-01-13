@@ -1,22 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createMessageSchema } from "~/lib/zod";
 import { db } from "~/server/db";
 import { streamText, convertToCoreMessages, CoreMessage } from 'ai';
 import { google } from '@ai-sdk/google'
 import { getContext } from "~/lib/context";
-import { saveMessage } from "~/server/actions";
 import { Message } from "ai";
+import { getServerAuthSession } from "~/server/auth";
 
 export async function POST(req: NextRequest) {
 
  try {
     const {messages, chatID} = await req.json()
 
-    const lastMessage = messages[messages.length - 1]
+    const lastMessage: Message = messages[messages.length - 1]
 
-    await db.message.create({data: {content: lastMessage.content, chatId: chatID, role: lastMessage.role}})
+    const role = lastMessage.role === 'assistant' ? 'ASSISTANT' : 'USER'
+    await db.message.create({data: {content: lastMessage.content, chatId: chatID, role}})
 
-    const chat = await db.chat.findUnique({where: {id: chatID}})
+    const chat = await db.chat.findUnique({where: {id: chatID as string}})
     if(!chat) return NextResponse.json({msg: 'Chat not found'}, {status: 404})
     const context = await getContext(lastMessage.content, chat.fileKey)
 
@@ -53,3 +53,18 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({msg: 'Internal server error'}, { status: 500})
   } 
 } 
+
+export async function GET(req: NextRequest) {
+   try {
+      const session = await getServerAuthSession()
+      if(!session?.user) return NextResponse.json({msg: 'Unauthorized'}, { status: 401})
+      const userId = session.user.id
+
+      const chatCount = await db.chat.count({ where: { userId}})
+
+      return NextResponse.json({chatCount}, { status: 200})
+   } catch(err) {
+      console.error(err)
+      return NextResponse.json({msg: 'Internal server error'}, { status: 500})
+   }
+}

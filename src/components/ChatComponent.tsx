@@ -1,10 +1,9 @@
 'use client'
 
-import { Send } from 'lucide-react'
-import { Form, FormControl, FormField, FormItem } from '~/components/ui/form'
+import { SendHorizonal, BotMessageSquare } from 'lucide-react'
 import MessageList from './MessageList'
 import { motion } from 'framer-motion'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Message } from '@prisma/client'
 import { Message as formattedMessage} from 'ai'
 import axios from 'axios'
@@ -20,7 +19,7 @@ type Input = z.infer<typeof createMessageSchema>
 
 export default function ChatComponent({chatID}: {chatID: string}) {
 
-  const {data: initialMessages, isLoading} = useQuery<Message[]>({
+  const {data: initialMessages, isFetching} = useQuery<Message[]>({
     queryKey: ['getMessages', chatID],
     queryFn: async () => {
         try {
@@ -47,13 +46,7 @@ export default function ChatComponent({chatID}: {chatID: string}) {
     defaultValues: { message: ''}
   })
 
-  // const {} = useMutation({
-  //   mutationFn: async (data: Input) => {
-  //      const res = await axios.post(`/api/messages/${chatID}`)
-  //   }
-  // })
-
-  const { input, handleSubmit, handleInputChange, messages} = useChat({ 
+  const { input, handleSubmit, handleInputChange, messages, isLoading} = useChat({ 
     api: '/api/chat',
     body: { chatID },
     initialMessages: formattedMessages,
@@ -63,35 +56,21 @@ export default function ChatComponent({chatID}: {chatID: string}) {
     }
  })
 
-async function OnSubmit(data: Input) {
-  handleSubmit({ preventDefault: () => {} }, { body: data })
-  form.reset()
-}
-
-
-    return <div className="flex flex-col gap-2 border-l-2 border-slate-400 p-1 w-1/3">
-        <h3 className='font-semibold'>Chat</h3>
-        <MessageList messages={messages ?? []}/>
+    return <div className="flex flex-col gap-2 bg-card border-l-2 border-slate-400 p-1 w-1/3 overflow-hidden">
+         <div className='flex items-center gap-3'>
+            <BotMessageSquare className='size-7'/>
+           <h3 className='font-semibold'>Chat</h3>
+         </div>
+        <MessageList messages={messages ?? []} isLoading={isLoading}/>
             <div className='flex items-center gap-3 p-2'>
-               <Form {...form}>
-                   <form className='flex items-center gap-3 w-full' onSubmit={form.handleSubmit(OnSubmit)}>
-                   <FormField
-                          control={form.control}
-                          name='message'
-                          render={({ field }) => (
-                             <FormItem className='flex flex-col gap-1 grow'>
-                              <FormControl>
-                                <input {...field} className='input-style' placeholder='enter a prompt...'/>
-                              </FormControl>
-                             </FormItem>
-                          )}
-                        />
+                   <form className='flex items-center gap-3 w-full' onSubmit={handleSubmit}>
+                                <input value={input} {...form.register('message')} onChange={handleInputChange} className='input-style grow' placeholder='enter a prompt...'/>
 
-                        <motion.button disabled={form.formState.isSubmitting} whileHover={{scale: 1.05}} whileTap={{scale: 0.9}} className='p-3 group flex-center rounded-xl bg-green-700'>
-                           <Send />
+                        <motion.button type='submit' disabled={form.formState.isSubmitting} whileHover={{scale: 1.01}} whileTap={{scale: 0.9}} className='p-2 group flex-center rounded-xl bg-green-700 '>
+                           <SendHorizonal />
                         </motion.button>
+
                    </form>
-               </Form>
             </div>
         </div>
 }

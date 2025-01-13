@@ -21,7 +21,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={sans.className}>
+  <html lang="en" className={sans.className}>
       <body>
         <Providers>
           <Navbar />

@@ -5,6 +5,7 @@ import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes"
 import { type ThemeProviderProps } from "next-themes"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from 'sonner'
+import { TooltipProvider } from '~/components/ui/tooltip'
 
 const query = new QueryClient()
 
@@ -26,8 +27,10 @@ export default function Providers({ children, ...props }: ThemeProviderProps) {
     <NextThemesProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange {...props}>
     <QueryClientProvider client={query}>
       <SessionProvider>
-        <ThemedToaster />
-        {children}
+        <TooltipProvider>
+          <ThemedToaster />
+             {children}
+          </TooltipProvider>
         </SessionProvider>
       </QueryClientProvider>
       </NextThemesProvider>

@@ -1,18 +1,16 @@
 'use client'
 
 import { useDropzone } from "react-dropzone"
-import { CloudUpload, FolderUp } from 'lucide-react';
+import { FolderUp } from 'lucide-react';
 import { toast } from "sonner";
 import { uploadFile } from "~/lib/s3";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from 'axios'
-import Spinner from "./Spinner";
 import { useEffect, useState } from "react";
 import { useRouter } from 'nextjs-toploader/app';
 import AnimatedCircularProgressBar from "./ui/animated-circular-progress-bar";
 import { twMerge } from "tailwind-merge";
-import { deleteAllFiles } from '~/lib/s3';
-import { deleteChats } from "~/server/actions";
+import { useSession } from "next-auth/react";
 
 export default function FileUpload() {
 
@@ -20,15 +18,18 @@ export default function FileUpload() {
     const router = useRouter()
 
     const [value,setValue] = useState<number>(0)
+    
+    const {data: session, status} = useSession()
+    const isPro = session?.user.isPro
 
   useEffect(() => {
      if(!uploading) return
      const interval = setInterval(() => {
         setValue(prev => {
             if(!uploading) return 100
-            if(prev >= 97) return 97
-            if(Math.random() < 0.1) return prev + 15
-            return prev + 5
+            if(prev >= 95) return 95
+            if(Math.random() < 0.1) return prev + 7
+            return prev + 2
         })
      }, 400)
 
@@ -54,11 +55,29 @@ export default function FileUpload() {
     }
  })
 
+ const {data: chatCount} = useQuery<number>({
+     queryKey: ['getChatCount'],
+     queryFn: async () => {
+       try {
+        const { data : { chatCount }} = await axios.get('/api/chat')
+        return chatCount
+       } catch(err) {
+           console.error(err)
+           throw new Error('Error')
+       }
+     }
+ })
+
  const {getRootProps, getInputProps, acceptedFiles} = useDropzone({
     accept: { 'application/pdf': ['.pdf']},
     maxFiles: 1,
     onDrop: async (files: File[]) => {
    try {
+        if(!isPro && chatCount && chatCount > 7) {
+            toast.error('You can only create up to 5 chats. Please upgrade to Pro.')
+            return
+        }
+
         const file = files[0] 
         if(file && file?.size > 3 * 1024 * 1024) {
             toast.error('Please upload a file less than 3MB')
@@ -68,7 +87,6 @@ export default function FileUpload() {
         setUploading(true)
         await new Promise(r => setTimeout(r, 5000))
         const data = await uploadFile(file) 
-        console.log(data)
         await createChat(data)
         
         } catch(err) {
@@ -92,12 +110,5 @@ export default function FileUpload() {
           )}
             <p className={twMerge("text-lg font-semibold text-gray-400", uploading && 'animate-pulse duration-1000')}>{uploading ? 'uploading your pdf...' :' Drop your PDF here'}</p>
         </div>
-
-        <button onClick={() => {
-                 deleteAllFiles('6782148a002e26893ddb')
-                 deleteChats()
-              }} className='p-3 absolute top-1/2 left-20 bg-red-700 rounded-md'>
-                delete
-              </button>
     </div>
 }

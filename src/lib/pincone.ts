@@ -39,7 +39,7 @@ export async function getPineconeClient() {
 }
 
 export async function uploadFileToPinecone(fileKey: string) {
-     console.log(fileKey)
+  
      const fileName = await downloadFile(fileKey)
 
 try {
@@ -57,12 +57,12 @@ try {
       await pineconeIndex.namespace(namespace).upsert(vectors as any)
 
       fs.unlink(fileName, (err) => {
-         console.error(err)
-         throw new Error('Error deleting file')
+         if(err) console.error(err)
       })
 
 } catch(error) {
         console.error('Error occured while uploading to Pinecone \n' + error)
+        throw error
      }
 }
 

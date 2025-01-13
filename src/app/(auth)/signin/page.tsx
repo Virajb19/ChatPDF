@@ -3,8 +3,6 @@ import SignIn from "~/components/auth/SignIn";
 import { getServerAuthSession } from "~/server/auth";
 
 export default async function SignInPage() {
-
-    await new Promise(res => setTimeout(res,5000))
   
     const session = await getServerAuthSession()
     if(session?.user) {

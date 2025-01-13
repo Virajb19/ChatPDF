@@ -40,10 +40,10 @@ export default function SignUp() {
 
     <motion.div initial={{ y: -40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{duration: 0.7, ease: 'easeInOut', type: 'spring', damping: '10'}} 
     className='w-[90%] sm:w-1/3 max-w-3xl'>
-              <Card className='shadow-lg shadow-blue-700'>
+              <Card className='shadow-lg shadow-green-700'>
                 <CardHeader className='text-center'>
                    <CardTitle className='text-[1.8rem] sm:text-5xl'>
-                    Welcome to <span className='bg-gradient-to-b from-blue-400 to-blue-700 bg-clip-text pr-1 font-black tracking-tighter text-transparent'>GitChat</span>
+                      Sign Up
                     </CardTitle>
                    <CardDescription className='sm:text-base'>Please enter your details to signup</CardDescription>
                 </CardHeader>
@@ -113,7 +113,7 @@ export default function SignUp() {
                           Already have an account?{' '}
                           <Link
                             href={'/signin'}
-                            className="text-blue-500 font-semibold hover:underline"
+                            className="text-green-500 font-semibold hover:underline"
                           >
                             Sign In
                           </Link>

@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { FaGithub} from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { useState } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 export const DemarcationLine = () => (
     <div className="flex items-center my-4">
@@ -31,7 +32,9 @@ export function OAuthButton({label, provider}: {label: string, provider: string}
         }
       }}
       disabled={loading}
-      className={"flex-center gap-4 w-full sm:w-fit mx-auto rounded-xl px-4 py-2 mb-2 text-base border border-blue-900 hover:bg-blue-600 dark:hover:bg-[#1e3a8a] hover:text-white hover:border-transparent duration-300 disabled:cursor-not-allowed disabled:opacity-60"}
+      className={twMerge("flex-center gap-4 w-full sm:w-fit mx-auto rounded-xl px-4 py-2 mb-2 text-base border-[3px] dark:border-transparent disabled:cursor-not-allowed disabled:opacity-60",
+        provider === 'github' ? 'bg-white/10' : 'bg-white text-black font-semibold'
+      )}
     >
        {label}
        {provider === 'github' ? <FaGithub className='size-8'/> : <FcGoogle className='size-8'/>}

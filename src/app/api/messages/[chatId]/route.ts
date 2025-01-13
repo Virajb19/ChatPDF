@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { createMessageSchema } from "~/lib/zod";
 import { getServerAuthSession } from "~/server/auth";
 import { db } from "~/server/db";
-import { getContext } from "~/lib/context";
 
 export async function GET(req: NextRequest, { params }: { params: { chatId: string } }) {
     try {

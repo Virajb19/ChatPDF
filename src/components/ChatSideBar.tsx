@@ -1,53 +1,51 @@
 'use client'
 
-import axios from 'axios';
-import { MessageCircle, CirclePlus } from 'lucide-react'
+import { MessageCircle, Zap, ArrowLeft } from 'lucide-react'
 import Link from 'next/link';
-import { useState } from 'react';
-import { toast } from 'sonner';
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 import { twMerge } from 'tailwind-merge';
 import { Chat } from '@prisma/client'
-import { useRouter } from 'nextjs-toploader/app';
 import { motion } from 'framer-motion'
+import { useRouter } from 'nextjs-toploader/app'
+import { toast } from 'sonner';
+import { createCheckoutSession } from '~/server/actions';
+import NewChatButton from './NewChatButton';
+import { useSession } from 'next-auth/react';
 
 export default function ChatSideBar({chats, chatID} : { chats: Chat[], chatID: string}) {
 
-    const [loading,setLoading] = useState(false)
+  const router = useRouter()
+  const { data: session } = useSession()
+  const isPro = session?.user.isPro
 
-    const router = useRouter()
-
-    async function handleSubscription() {
-      const loadID = toast.loading('Directing to stripe payment page...')
-       try {
-         setLoading(true)
-        const response = await axios.get('/api/stripe')
-        window.location.href = response.data.url
-      } catch(error) {
-        toast.error('Something went wrong. Try again !!!')
-      } finally {
-        setLoading(false)
-        toast.dismiss(loadID)
-       }
-    }
-
-    return <div className="min-h-screen flex flex-col p-3 gap-2 text-white bg-[#15122e] w-1/5">
-            <button className='flex-center gap-2 border-2 border-dashed border-white/40 text-gray-300 opacity-80 hover:opacity-100 duration-200 px-4 py-2 text-lg rounded-lg font-bold'>
-                <CirclePlus className='size-6' strokeWidth={3}/>
-                 New Chat
-            </button>
-             <div id='chats' className='flex flex-col p-1 gap-3 overflow-y-scroll h-[39rem]'>
+    return <div className="min-h-screen flex flex-col p-3 gap-2 text-white bg-[#0c0b1d] w-1/5 overflow-hidden">
+             <NewChatButton />
+             <div id='chats' className='flex flex-col p-1 gap-3 overflow-y-scroll h-[40rem]'>
                {chats.map((chat,i) => {
-                return <motion.button initial={{y: 7, opacity: 0, scale: 0.8}} animate={{y: 0, opacity: 1, scale: 1}} transition={{duration: 0.6, delay: i * 0.3, type: 'spring', bounce: 0.7}} key={i} onClick={() => router.push(`/chats/${chat.id}`)} 
+                return <motion.button initial={{opacity: 0, y: 7}} animate={{opacity: 1, y: 0,backgroundColor: chat.id === chatID ? 'green' : undefined}} transition={{delay: i * 0.3, ease: 'easeInOut'}} key={i} onClick={() => router.push(`/chats/${chat.id}`)} 
                 className={twMerge('flex items-center gap-3 text-lg font-semibold border rounded-lg p-3 overflow-hidden border-gray-800 duration-300', chat.id === chatID ? 'border-transparent bg-green-600' : 'hover:bg-white/10')}>
                       <MessageCircle />
                       <p className='text-ellipsis truncate whitespace-nowrap'>{chat.pdfName}</p>
                 </motion.button>
                })}
                </div>
-               <div className='flex p-1 gap-1 justify-between items-center text-xs border-t border-gray-400 py-2'>
-                   <Link className='text-gray-500 hover:text-white duration-200' href='/'>Home</Link>
-                   <Link className='text-gray-500 hover:text-white duration-200' href='/'>Source</Link>
-                   <button disabled={loading} onClick={handleSubscription} className={twMerge('text-sm truncate border border-gray-400 rounded-full px-3 py-1 hover:bg-[#5602F0] hover:border-transparent duration-300', loading && "text-gray-600 cursor-not-allowed border-gray-700 hover:bg-transparent")}>Upgrade to premium</button>
+               <div className='flex flex-col p-1 gap-1 justify-between border-t border-gray-400 py-2'>
+                    <Link href={'/'} className='group text-center rounded-full flex-center gap-2 py-2 bg-white/20'> <ArrowLeft className='group-hover:-translate-x-1.5 duration-300'/> Go to Home</Link>
+                   {!isPro && (
+                        <Tooltip>
+                        <TooltipTrigger>
+                              <motion.button onClick={() => {
+                                toast.promise(createCheckoutSession() , { loading: 'Directing to Stripe page...', success: 'Directed', error: 'Something went wrong'})
+                              }} initial={{opacity: 0, y: 15}} animate={{opacity: 1, y: 0}} transition={{duration: 0.4, type: 'spring', bounce: 0.5}}
+                              className='flex-center gap-3 p-2 text-lg font-bold w-full bg-gradient-to-b from-green-500 to-green-800 rounded-full'>
+                              <Zap /> Upgrade To Premium
+                            </motion.button>
+                        </TooltipTrigger>
+                         <TooltipContent className='bg-[#15123e] text-base rounded-full text-white font-semibold' sideOffset={10} side='top'>
+                             Access to create 20 chats
+                         </TooltipContent>
+                     </Tooltip>
+                   )}
                </div> 
         </div> 
 }

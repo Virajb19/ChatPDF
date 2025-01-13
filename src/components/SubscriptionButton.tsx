@@ -1,31 +1,25 @@
 'use client'
 
-import axios from "axios"
 import { useState } from "react"
 import { toast } from "sonner"
 import { twMerge } from "tailwind-merge"
+import { createCheckoutSession } from "~/server/actions"
 
 export default function SubscriptionButton({isPro}: {isPro: boolean}) {
 
-    const [loading,setLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState(false)
 
-    async function handleSubcription() {
-        const toastId = toast.loading('Directing to stripe page...')
-      try {
-        setLoading(true)
-        // await new Promise(res => setTimeout(res,10000))
-        const response = await axios.get('/api/stripe')
-        window.location.href = response.data.url
-        // toast.dismiss(toastId)
-      } catch(err) {
-         toast.error('Something went wrong. Try again !!!')
-      } finally {
-        setLoading(false)
-        toast.dismiss(toastId)
-      }
-    }
-
-    return <button disabled={loading} onClick={handleSubcription} className={twMerge("bg-white text-black px-4 py-2 font-semibold rounded-lg", loading && "cursor-not-allowed text-gray-500")}>
+    return <button disabled={isLoading} onClick={() => {
+      setIsLoading(true)
+      const id = toast.loading('Directing to Stripe page...')
+      createCheckoutSession().then(res => toast.success('Directed')).catch(err => {
+        console.error(err)
+        toast.error('Something went wrong')
+      }).finally(() => {
+        setIsLoading(false)
+        toast.dismiss(id)
+      })
+    }} className={twMerge("px-4 py-2 font-semibold bg-black dark:bg-white text-white dark:text-black rounded-lg disabled:cursor-not-allowed disabled:opacity-80")}>
         {isPro ? "Manage Subscriptions" : "Go to pro !"}
     </button>
 }

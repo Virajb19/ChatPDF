@@ -41,7 +41,7 @@ export default function SignIn() {
 
     <motion.div initial={{ y: -40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{duration: 0.7, ease: 'easeInOut', type: 'spring', damping: '10'}} 
     className='w-[90%] sm:w-1/3 max-w-3xl'>
-              <Card className='shadow-lg shadow-blue-700'>
+              <Card className='shadow-lg shadow-green-700'>
                 <CardHeader className='text-center'>
                    <CardTitle className='text-4xl sm:text-5xl'>Welcome Back</CardTitle>
                    <CardDescription className='sm:text-base'>Please enter your details to signin</CardDescription>
@@ -98,7 +98,7 @@ export default function SignIn() {
                           Don&apos;t have an account yet?{' '}
                           <Link
                             href={'/signup'}
-                            className="text-blue-500 font-semibold hover:underline"
+                            className="text-green-500 font-semibold hover:underline"
                           >
                             Sign Up
                           </Link>
