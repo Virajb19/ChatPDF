@@ -5,7 +5,6 @@ import SubscriptionButton from '~/components/SubscriptionButton';
 import { getServerAuthSession } from '~/server/auth';
 import { db } from '~/server/db';
 import { StarsBackground } from '~/components/ui/stars-background';
-import Image from 'next/image';
 
 export default async function HomePage() {
 
@@ -21,7 +20,7 @@ export default async function HomePage() {
      return <main className="w-full min-h-screen flex-center relative">
                 <StarsBackground className='-z-10'/>
                 <div id='homepage' className="flex flex-col p-2 gap-3 items-center">
-                 <h1 className="mb:text-3xl tb:text-c-5xl font-medium mb:tracking-tighter">Chat with any PDF</h1>
+                 <h1 className="font-semibold mb:text-4xl">Chat with any PDF</h1>
                  <div id='buttons' className='flex p-1 gap-4 mb:text-sm'>
                  {isAuth && firstChat && <Link href={`/chats/${firstChat.id}`} className='flex gap-2 items-center px-4 py-2 bg-green-700 rounded-lg font-semibold group'>Go to chats<span className='group-hover:translate-x-1.5 duration-200'><ArrowRightToLine /></span></Link>}
                  <SubscriptionButton isPro={isPro ?? false}/>

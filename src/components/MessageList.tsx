@@ -25,9 +25,9 @@ export default function MessageList({messages, isLoading} : { messages: Message[
           behavior: 'smooth'
         })
      }
-  }, [messages])
+  }, [messages]) 
 
-    return <div id="message-container" className="flex flex-col p-2 grow gap-3 max-h-[43rem] overflow-y-scroll text-sm border-t border-slate-500">
+    return <div id="message-container" className="flex flex-col p-2 grow gap-3 max-h-[43rem] mb:h-[calc(90vh-5rem)] overflow-y-scroll text-sm sm:border-t border-slate-500">
                {messages.map((message,i) => { 
                  return <div className={twMerge("flex items-start gap-2", message.role === "user" && 'flex-row-reverse items-center')}>
                   {message.role === 'assistant' ? (

@@ -18,9 +18,9 @@ export default function ChatSideBar({chats, chatID} : { chats: Chat[], chatID: s
   const { data: session } = useSession()
   const isPro = session?.user.isPro
 
-    return <div className="min-h-screen flex flex-col p-3 gap-2 text-white bg-[#0c0b1d] w-1/5 overflow-hidden">
+    return <div className="min-h-screen flex flex-col p-3 gap-2 text-white bg-[#0c0b1d] w-1/5 mb:w-full overflow-hidden">
              <NewChatButton />
-             <div id='chats' className='flex flex-col p-1 gap-3 overflow-y-scroll h-[40rem]'>
+             <div id='chats' className='flex flex-col p-1 gap-3 overflow-y-scroll h-[40rem] mb:h-[30rem]'>
                {chats.map((chat,i) => {
                 return <motion.button initial={{opacity: 0, y: 7}} animate={{opacity: 1, y: 0,backgroundColor: chat.id === chatID ? 'green' : undefined}} transition={{delay: i * 0.3, ease: 'easeInOut'}} key={i} onClick={() => router.push(`/chats/${chat.id}`)} 
                 className={twMerge('flex items-center gap-3 text-lg font-semibold border rounded-lg p-3 overflow-hidden border-gray-800 duration-300', chat.id === chatID ? 'border-transparent bg-green-600' : 'hover:bg-white/10')}>

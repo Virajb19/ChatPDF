@@ -56,8 +56,8 @@ export default function ChatComponent({chatID}: {chatID: string}) {
     }
  })
 
-    return <div className="flex flex-col gap-2 bg-card border-l-2 border-slate-400 p-1 w-1/3 overflow-hidden">
-         <div className='flex items-center gap-3'>
+    return <div className="flex flex-col gap-2 bg-card sm:border-l-2 border-slate-400 p-1 w-1/3 mb:w-full overflow-hidden">
+         <div className='flex items-center gap-3 mb:hidden'>
             <BotMessageSquare className='size-7'/>
            <h3 className='font-semibold'>Chat</h3>
          </div>

@@ -18,11 +18,17 @@ export default async function ChatPage({ params : { chatID }} : { params: { chat
 
   // console.log(current_chat)
 
-    return <main className="w-full h-screen flex overflow-hidden">
+    return <>
+       <main className="w-full mb:hidden h-screen flex overflow-hidden">
               <ChatSideBar chats={chats} chatID={chatID}/>
             <div className="min-h-screen w-1/2 flex-center">
             <PDFViewer pdfURL={current_chat.pdfURL || ""}/>
               </div>
               <ChatComponent chatID={chatID}/>
         </main>
+
+        <main className="sm:hidden pt-20">
+             <ChatComponent chatID={chatID}/>
+        </main>
+    </>
 }

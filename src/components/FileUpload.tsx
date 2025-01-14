@@ -84,6 +84,11 @@ export default function FileUpload() {
             return
         }
 
+        if (file && file.type !== 'application/pdf') {
+            toast.error('Only PDF files are allowed. Please upload a valid PDF.')
+            return
+          }
+
         setUploading(true)
         await new Promise(r => setTimeout(r, 5000))
         const data = await uploadFile(file) 
@@ -97,6 +102,8 @@ export default function FileUpload() {
         }
     }
  })
+
+ const [open, setOpen] = useState(false)
 
     return <div className="bg-white/20 rounded-xl h-48 p-2 mt-3">
         <div {...getRootProps({className: 'group flex-center flex-col gap-3 bg-white/10 border-[3px] border-dashed border-gray-300 cursor-pointer rounded-xl h-full'})}>
