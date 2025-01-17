@@ -35,6 +35,7 @@ export default function SignIn() {
     }
     toast.success('Login successfull!. Welcome back!')
     router.push('/')
+    router.refresh()
   }
 
   return <div className="w-full min-h-screen flex-center text-lg">
