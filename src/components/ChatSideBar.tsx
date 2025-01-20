@@ -41,7 +41,7 @@ export default function ChatSideBar({chats, chatID} : { chats: Chat[], chatID: s
                               <Zap /> Upgrade To Premium
                             </motion.button>
                         </TooltipTrigger>
-                         <TooltipContent className='bg-[#15123e] text-base rounded-full text-white font-semibold' sideOffset={10} side='top'>
+                         <TooltipContent className='bg-[#15123e] text-base rounded-sm border-[3px] border-gray-300 text-white font-semibold' sideOffset={10} side='top'>
                              Access to create 20 chats
                          </TooltipContent>
                      </Tooltip>

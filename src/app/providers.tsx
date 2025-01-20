@@ -7,7 +7,14 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from 'sonner'
 import { TooltipProvider } from '~/components/ui/tooltip'
 
-const query = new QueryClient()
+const query = new QueryClient({
+   defaultOptions: {
+    queries: {
+      retry: 2,
+      staleTime: 5 * 60 * 1000
+    }
+   }
+})
 
 function ThemedToaster() {
   const { theme } = useTheme()

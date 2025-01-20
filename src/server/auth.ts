@@ -7,6 +7,7 @@ import { db } from "~/server/db"
 import CredentialsProvider from "next-auth/providers/credentials";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { SignInSchema } from "~/lib/zod";
 import bcrypt from 'bcrypt'
 
@@ -27,6 +28,7 @@ declare module 'next-auth/jwt' {
 }
 
 export const authOptions: NextAuthOptions = {
+  // adapter: PrismaAdapter(db),
   callbacks: {
     jwt: async ({user,token}) => {
       if(user) {

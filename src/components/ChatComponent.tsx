@@ -61,7 +61,7 @@ export default function ChatComponent({chatID}: {chatID: string}) {
             <BotMessageSquare className='size-7'/>
            <h3 className='font-semibold'>Chat</h3>
          </div>
-        <MessageList messages={messages ?? []} isLoading={isLoading}/>
+        <MessageList messages={messages ?? []} isLoading={isLoading} isFetching={isFetching}/>
             <div className='flex items-center gap-3 p-2'>
                    <form className='flex items-center gap-3 w-full' onSubmit={handleSubmit}>
                                 <input value={input} {...form.register('message')} onChange={handleInputChange} className='input-style grow' placeholder='enter a prompt...'/>

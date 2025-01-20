@@ -12,7 +12,7 @@ export default function UserAvatar() {
     {user?.image ? 
            (
             <div className="aspect-square">
-              <Image src={user?.image} alt="profileImage" width={50} height={50} className="object-cover rounded-full" referrerPolicy="no-referrer"/>
+              <Image src={user?.image} alt="profileImage" width={60} height={60} className="object-cover rounded-full" referrerPolicy="no-referrer"/>
             </div>
         ) : (
                 <AvatarFallback>

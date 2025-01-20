@@ -2,11 +2,11 @@ import { useEffect, useRef } from "react";
 import { twMerge } from "tailwind-merge";
 import { Message } from 'ai'
 import { motion } from 'framer-motion'
-import { Bot, User } from 'lucide-react'
+import { Bot, User, Loader2 } from 'lucide-react'
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 
-export default function MessageList({messages, isLoading} : { messages: Message[], isLoading: boolean}) {
+export default function MessageList({messages, isLoading, isFetching} : { messages: Message[], isLoading: boolean, isFetching: boolean}) {
 
   const {data: session, status} = useSession()
   const user = session?.user
@@ -26,6 +26,10 @@ export default function MessageList({messages, isLoading} : { messages: Message[
         })
      }
   }, [messages]) 
+
+  if(isFetching) return <div className="h-[43rem] mb:h-[calc(90vh-5rem)] grow flex-center  sm:border-t border-slate-500">
+         <Loader2 className="size-12 text-green-600 animate-spin"/>
+  </div>
 
     return <div id="message-container" className="flex flex-col p-2 grow gap-3 max-h-[43rem] mb:h-[calc(90vh-5rem)] overflow-y-scroll text-sm sm:border-t border-slate-500">
                {messages.map((message,i) => { 

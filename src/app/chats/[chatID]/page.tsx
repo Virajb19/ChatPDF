@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation"
+import { redirect, notFound } from "next/navigation"
 import ChatComponent from "~/components/ChatComponent"
 import ChatSideBar from "~/components/ChatSideBar"
 import PDFViewer from "~/components/PDFViewer"
@@ -14,7 +14,7 @@ export default async function ChatPage({ params : { chatID }} : { params: { chat
   if(!chats) return redirect('/')
 
   const current_chat = chats.find(chat => chat.id === chatID)
-  if(!current_chat) return redirect('/')
+  if(!current_chat) return notFound()
 
   // console.log(current_chat)
 
