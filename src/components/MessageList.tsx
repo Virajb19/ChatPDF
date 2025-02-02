@@ -27,11 +27,11 @@ export default function MessageList({messages, isLoading, isFetching} : { messag
      }
   }, [messages]) 
 
-  if(isFetching) return <div className="h-[43rem] mb:h-[calc(90vh-5rem)] grow flex-center  sm:border-t border-slate-500">
+  if(isFetching) return <div className="h-[43rem] mb:h-[calc(90vh-5rem)] grow flex-center sm:border-t border-slate-500">
          <Loader2 className="size-12 text-green-600 animate-spin"/>
   </div>
 
-    return <div id="message-container" className="flex flex-col p-2 grow gap-3 max-h-[43rem] mb:h-[calc(90vh-5rem)] overflow-y-scroll text-sm sm:border-t border-slate-500">
+    return <div id="message-container" className="flex flex-col p-2 grow gap-3 max-h-[43rem] mb:h-[calc(90vh-5rem)] overflow-y-scroll text-sm sm:border-t-4 border-slate-500">
                {messages.map((message,i) => { 
                  return <div className={twMerge("flex items-start gap-2", message.role === "user" && 'flex-row-reverse items-center')}>
                   {message.role === 'assistant' ? (
