@@ -7,7 +7,6 @@ import { db } from "~/server/db"
 import CredentialsProvider from "next-auth/providers/credentials";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { SignInSchema } from "~/lib/zod";
 import bcrypt from 'bcrypt'
 
@@ -28,16 +27,15 @@ declare module 'next-auth/jwt' {
 }
 
 export const authOptions: NextAuthOptions = {
-  // adapter: PrismaAdapter(db),
   callbacks: {
-    jwt: async ({user,token}) => {
-      if(user) {
-        const existingUser = await db.user.findFirst({where: { OR: [{OauthId: user.id}, { id: parseInt(user.id)}]}, select: {id: true, isPro: true}})
-        if(existingUser) {
-          token.id = existingUser.id
-          token.isPro = existingUser.isPro
-        }
-      }
+    jwt: async ({token}) => {
+       if(token && token.sub) {
+          const existingUser = await db.user.findFirst({where: { OR: [{OauthId: token.sub}, { id: parseInt(token.sub)}]}, select: {id: true, isPro: true}})
+          if(existingUser) {
+             token.id = existingUser.id
+             token.isPro = existingUser.isPro
+          }
+       }
        return token
     },
     session: async ({session, token}) => {

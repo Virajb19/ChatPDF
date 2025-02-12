@@ -103,10 +103,10 @@ export default function FileUpload() {
     }
  })
 
- const [open, setOpen] = useState(false)
+//  const [open, setOpen] = useState(false)
 
-    return <div className="bg-white/20 rounded-xl h-48 p-2 mt-3">
-        <div {...getRootProps({className: 'group flex-center flex-col gap-3 bg-white/10 border-[3px] border-dashed border-gray-300 cursor-pointer rounded-xl h-full'})}>
+    return <div className="bg-secondary dark:bg-white/20 rounded-xl h-48 p-2 mt-3">
+        <div {...getRootProps({className: 'group flex-center flex-col gap-3 bg-white/10 border-[3px] border-dashed border-green-500 dark:border-gray-300 cursor-pointer rounded-xl h-full'})}>
           {uploading ? (
             <AnimatedCircularProgressBar className="size-24" min={0} max={100} value={value} gaugePrimaryColor="rgb(34, 197, 94)" gaugeSecondaryColor="rgba(34, 197, 94, 0.1)"/>
           ) : (

@@ -5,10 +5,9 @@ import { ThemeToggle } from "./ThemeToggle";
 import UserAccountNav from "./UserAccountNav";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import ChatPDFIcon from "./ChatPdfIcon";
 import { useMediaQuery } from 'usehooks-ts'
 import { useEffect, useRef, useState } from "react";
-import { Menu, X} from 'lucide-react'
+import { Menu, X, Files} from 'lucide-react'
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Chat } from "@prisma/client";
@@ -63,7 +62,7 @@ useEffect(() => {
   return <motion.nav initial={{y: -75}} animate={{y: 0}} transition={{duration: 0.8, type: 'spring', bounce: 0.6}}
     className="fixed z-[99] inset-x-0 flex items-center backdrop-blur-md p-3 justify-between border-b border-gray-600">
             <div className="flex items-center gap-1">
-                 <ChatPDFIcon size={53}/>
+                 <Files className="text-green-600 size-7 sm:size-10" strokeWidth={2}/>
                   {pathname.includes('/chats') && (
                          <button onClick={() => setIsOpen(!isOpen)} className="p-2.5 bg-white/10 rounded-2xl sm:hidden">
                            {isOpen ? <X /> : <Menu />}

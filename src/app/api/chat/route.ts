@@ -6,6 +6,7 @@ import { getContext } from "~/lib/context";
 import { Message } from "ai";
 import { getServerAuthSession } from "~/server/auth";
 
+
 export async function POST(req: NextRequest) {
 
  try {
@@ -39,15 +40,19 @@ export async function POST(req: NextRequest) {
       "I'm sorry, but I don't know the aru
       assistant will not apologize for previous responses, but instead will indicated new information was gained.
       assistant will not invent anything that is not drawn directly from the context.
+
+      Provide more structured response like when you provide points add number in front of them.
       `     
     }
 
-    const result = await streamText({
+  const result = await streamText({
       model: google('gemini-1.5-pro'),
       messages: [prompt, ...convertToCoreMessages(messages)],
+      
   })
 
     return result.toDataStreamResponse()
+
   } catch(error) {
     console.error(error)
     return NextResponse.json({msg: 'Internal server error'}, { status: 500})

@@ -17,4 +17,4 @@ export async function uploadFile(file: File | undefined) {
     return { fileName: res.name, fileKey}
 }
 
-export const getFileURL = (fileKey: string) => storage.getFilePreview('6782148a002e26893ddb', fileKey.slice(0, 15))
+export const getFileURL = (fileKey: string) => storage.getFileView('6782148a002e26893ddb', fileKey.slice(0, 15))

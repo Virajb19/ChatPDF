@@ -42,7 +42,7 @@ export async function saveMessage(content: string, chatId: string, role: Role) {
 export async function createCheckoutSession() {
     const authSession = await getServerAuthSession()
     if(!authSession?.user) throw new Error('Unauthorized')
-        const userId = authSession.user.id
+    const userId = authSession.user.id
     
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {apiVersion: '2024-09-30.acacia'})
     const session = await stripe.checkout.sessions.create({

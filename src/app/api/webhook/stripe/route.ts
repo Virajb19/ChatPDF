@@ -19,9 +19,8 @@ export async function POST(req: NextRequest) {
     const session = event.data.object as Stripe.Checkout.Session
 
     if(event.type === 'checkout.session.completed') {
-        const credits = Number(session.metadata?.['credits'])
         const userId = Number(session.client_reference_id)
-        if(!userId || !credits) return NextResponse.json({msg: 'Missing userId or credits'}, { status: 404})
+        if(!userId) return NextResponse.json({msg: 'Missing userId'}, { status: 404})
 
         await db.user.update({where: {id: userId}, data: {isPro: true}})
 
