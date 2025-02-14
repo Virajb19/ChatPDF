@@ -66,7 +66,7 @@ export default function ChatComponent({chatID}: {chatID: string}) {
                    <form className='flex items-center gap-3 w-full' onSubmit={handleSubmit}>
                                 <input value={input} {...form.register('message')} onChange={handleInputChange} className='input-style grow' placeholder='enter a prompt...'/>
 
-                        <motion.button type='submit' disabled={form.formState.isSubmitting} whileHover={{scale: 1.01}} whileTap={{scale: 0.9}} className='p-2 group flex-center rounded-xl bg-green-700 '>
+                        <motion.button type='submit' disabled={form.formState.isSubmitting || isLoading} whileHover={{scale: 1.01}} whileTap={{scale: 0.9}} className='p-2 group flex-center rounded-xl bg-green-700 '>
                            <SendHorizonal />
                         </motion.button>
 
