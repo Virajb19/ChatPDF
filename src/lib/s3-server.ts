@@ -8,7 +8,7 @@ const client = new Client()
     .setProject('678214740011efc3b8ec')
     .setKey(secretKey)
 
-const storage = new Storage(client)
+export const storage = new Storage(client)
 
 export async function downloadFile(fileKey: string) {
 

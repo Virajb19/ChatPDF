@@ -74,12 +74,17 @@ export default function FileUpload() {
     onDrop: async (files: File[]) => {
    try {
         if(!isPro && chatCount && chatCount > 7) {
-            toast.error('You can only create up to 5 chats. Please upgrade to Pro.')
+            toast.error('You can only create up to 7 chats. Please upgrade to Pro.')
             return
         }
 
-        const file = files[0] 
-        if(file && file?.size > 3 * 1024 * 1024) {
+        if(isPro && chatCount && chatCount > 20) {
+            toast.error('You can only create up to 20 chats.')
+            return
+        }
+
+        const file = files[0]
+        if(file && file?.size >= 3 * 1024 * 1024) {
             toast.error('Please upload a file less than 3MB')
             return
         }
@@ -91,19 +96,19 @@ export default function FileUpload() {
 
         setUploading(true)
         await new Promise(r => setTimeout(r, 5000))
+        // Reversing the order of uploadFile and createChat will throw an error
         const data = await uploadFile(file) 
         await createChat(data)
         
         } catch(err) {
             console.error(err) 
-            toast.error('File upload failed. Try again!!')
+            toast.error('File upload failed. Try again!!', { position: 'bottom-right'})
         } finally {
             setUploading(false)
+            setValue(0)
         }
     }
  })
-
-//  const [open, setOpen] = useState(false)
 
     return <div className="bg-secondary dark:bg-white/20 rounded-xl h-48 p-2 mt-3">
         <div {...getRootProps({className: 'group flex-center flex-col gap-3 bg-white/10 border-[3px] border-dashed border-green-500 dark:border-gray-300 cursor-pointer rounded-xl h-full'})}>

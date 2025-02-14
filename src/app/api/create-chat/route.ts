@@ -4,6 +4,7 @@ import { db } from "~/server/db";
 import { uploadFileToPinecone } from "~/lib/pincone";
 import { getFileURL } from "~/lib/s3";
 import { getServerAuthSession } from "~/server/auth";
+import { storage } from '~/lib/s3-server'
 
 export async function POST(req: NextRequest) {
     try {
@@ -22,11 +23,30 @@ export async function POST(req: NextRequest) {
         if(!parsedData.success) return NextResponse.json({msg: 'Invalid inputs', errors: parsedData.error.flatten().fieldErrors}, {status: 400})
         const {fileName, fileKey} = parsedData.data
 
+        const fileMetaData = await storage.getFile('6782148a002e26893ddb', fileKey.slice(0,15))
+        if(!fileMetaData) return NextResponse.json({msg: 'File not found!'}, { status: 404})
+
+        const fileSize = fileMetaData.sizeOriginal / ( 1024 * 1024)
+        if(fileSize >= 3) {
+            await storage.deleteFile('6782148a002e26893ddb', fileKey.slice(0,15))
+            return NextResponse.json({ msg: 'File size exceeds 3MB limit'}, { status: 400})
+        }
+
         const fileURL = getFileURL(fileKey)
     
         const chat = await db.chat.create({data: {pdfName: fileName, fileKey, pdfURL: fileURL ,userId: user.id}})
 
         await uploadFileToPinecone(fileKey)
+        // return uploadFileToPinecone(fileKey)
+        // .then(() => {
+        //     return NextResponse.json({ msg: "Chat created successfully", chatId: chat.id }, { status: 200 });
+        // })
+        // .catch(async (err) => {
+        //     console.error("Error uploading to Pinecone:", err);
+        //     await db.chat.delete({ where: { id: chat.id } });
+
+        //     return NextResponse.json({ msg: "Error processing file, chat creation rolled back!" }, { status: 500 });
+        // });
         
         return NextResponse.json({msg: 'Chat created successfully', chatId: chat.id}, {status: 200})
     } catch(err) {
