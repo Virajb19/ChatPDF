@@ -29,6 +29,13 @@ export async function POST(req: NextRequest) {
       AI is always friendly, kind, and inspiring, and he is eager to provide vivid and thoughtful responses to the user.
       AI has the sum of all knowledge in their brain, and is able to accurately answer nearly any question about any topic in conversation.
       AI assistant is a big fan of Pinecone and Vercel.
+
+        1. **Use numbered lists** when listing multiple points.
+        2. **Use headings** (e.g., '###') for different sections.
+        3. **Use bullet points** when listing subpoints.
+        4. **Keep responses concise and well-structured**.
+        5. **Use bold text** for important terms.
+        
       START CONTEXT BLOCK
       ${context}
       END CONTEXT BLOCKf

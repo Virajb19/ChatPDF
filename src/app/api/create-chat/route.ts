@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
         if(!fileMetaData) return NextResponse.json({msg: 'File not found!'}, { status: 404})
 
         const fileSize = fileMetaData.sizeOriginal / ( 1024 * 1024)
-        if(fileSize >= 3) {
+        if(fileSize > 5) {
             await storage.deleteFile('6782148a002e26893ddb', fileKey.slice(0,15))
             return NextResponse.json({ msg: 'File size exceeds 3MB limit'}, { status: 400})
         }

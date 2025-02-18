@@ -20,16 +20,16 @@ export default function ChatSideBar({chats, chatID} : { chats: Chat[], chatID: s
   const isPro = session?.user.isPro
 
   useEffect(() => {
-     const selectedChat = document.querySelector('.chats.bg-green-600') as HTMLButtonElement
-     if(selectedChat) selectedChat.scrollIntoView({ behavior: 'smooth', block: 'center'})
+     const selectedChat = document.querySelector('.chats.selected') as HTMLButtonElement
+     if(selectedChat) selectedChat.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center'})
   }, [chatID])
 
     return <div className="min-h-screen flex flex-col p-3 gap-2 text-white bg-[#0c0b1d] w-1/5 mb:w-full overflow-hidden">
              <NewChatButton />
              <div id='chats' className='flex flex-col p-1 gap-3 overflow-y-scroll h-[40rem] mb:h-[30rem]'>
                {chats.map((chat,i) => {
-                return <motion.button initial={{opacity: 0, y: 7}} animate={{opacity: 1, y: 0,backgroundColor: chat.id === chatID ? 'green' : undefined}} transition={{delay: i * 0.1, ease: 'easeInOut'}} key={i} onClick={() => router.push(`/chats/${chat.id}`)} 
-                className={twMerge('chats flex items-center gap-3 text-lg font-semibold border rounded-lg p-3 border-gray-800 duration-300', chat.id === chatID ? 'border-transparent bg-green-600' : 'hover:bg-white/10')}>
+                return <motion.button initial={{opacity: 0, y: 7}} animate={{opacity: 1, y: 0}} transition={{delay: i * 0.1, ease: 'easeInOut'}} key={i} onClick={() => router.push(`/chats/${chat.id}`)} 
+                className={twMerge('chats flex items-center gap-3 text-lg font-semibold border rounded-lg p-3 border-gray-800 duration-300', chat.id === chatID ? 'border-transparent bg-[#008000] selected' : 'hover:bg-white/10')}>
                       <span><MessageCircle /></span>
                       <p className='text-ellipsis truncate whitespace-nowrap'>{chat.pdfName}</p>
                 </motion.button>

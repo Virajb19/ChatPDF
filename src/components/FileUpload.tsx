@@ -84,8 +84,8 @@ export default function FileUpload() {
         }
 
         const file = files[0]
-        if(file && file?.size >= 3 * 1024 * 1024) {
-            toast.error('Please upload a file less than 3MB')
+        if(file && file?.size >= 5 * 1024 * 1024) {
+            toast.error('Please upload a file less than 5MB')
             return
         }
 

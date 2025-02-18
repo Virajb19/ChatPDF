@@ -80,7 +80,7 @@ useEffect(() => {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div ref={sidebarRef} initial={{x: '-100%'}} animate={{x: 0}} exit={{x: '-100%'}} transition={{duration: 0.3, ease: 'easeInOut'}}
-                     className="sm:hidden absolute top-24 left-0 h-[calc(90vh-2rem)] w-3/4 max-w-sm border rounded-r-xl flex flex-col gap-2 overflow-hidden bg-[#11102b]">
+                     className="sm:hidden absolute top-24 left-0 h-[calc(90vh-2rem)] w-3/4 max-w-sm border rounded-r-xl flex flex-col gap-2 bg-[#11102b]">
                       <ChatSideBar chatID={chatId} chats={chats ?? []}/>
                     </motion.div>
                 )}
