@@ -31,7 +31,7 @@ export default function MessageList({messages, isLoading, isFetching} : { messag
          <Loader2 className="size-12 text-green-600 animate-spin"/>
   </div>
 
-    return <div id="message-container" className="flex flex-col p-2 grow gap-3 max-h-[43rem] mb:h-[calc(90vh-5rem)] overflow-y-scroll text-sm sm:border-t-4 border-slate-500">
+    return <div id="message-container" className="flex flex-col justify-end p-2 grow gap-3 max-h-[43rem] mb:h-[calc(90vh-5rem)] overflow-y-scroll text-sm sm:border-t-4 border-slate-500">
              {messages.length === 0 ? (
                <h3 className="self-center my-auto"> Ask Something!</h3>
              ) : (
