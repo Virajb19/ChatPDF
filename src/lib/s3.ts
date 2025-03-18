@@ -2,7 +2,7 @@ import { Client, Storage } from "appwrite";
 
 const client = new Client()
     .setEndpoint('https://cloud.appwrite.io/v1')
-    .setProject('678214740011efc3b8ec');
+    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!);
 
 const storage = new Storage(client);
 
@@ -12,9 +12,9 @@ export async function uploadFile(file: File | undefined) {
 
     const fileKey = Date.now().toString() + "_" + file.name.replace(' ', '-')
     const fileId = fileKey.slice(0, 15)
-    const res = await storage.createFile('6782148a002e26893ddb', fileId , file, [] ,(progress) => console.log(progress.progress))
+    const res = await storage.createFile(process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID!, fileId , file, [] ,(progress) => console.log(progress.progress))
 
     return { fileName: res.name, fileKey}
 }
 
-export const getFileURL = (fileKey: string) => storage.getFileView('6782148a002e26893ddb', fileKey.slice(0, 15))
+export const getFileURL = (fileKey: string) => storage.getFileView(process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID!, fileKey.slice(0, 15))

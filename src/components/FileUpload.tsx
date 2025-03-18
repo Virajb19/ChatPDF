@@ -55,7 +55,7 @@ export default function FileUpload() {
     }
  })
 
- const {data: chatCount} = useQuery<number>({
+ const {data: chatCount, isFetching} = useQuery<number>({
      queryKey: ['getChatCount'],
      queryFn: async () => {
        try {
@@ -116,7 +116,7 @@ export default function FileUpload() {
             <AnimatedCircularProgressBar className="size-24" min={0} max={100} value={value} gaugePrimaryColor="rgb(34, 197, 94)" gaugeSecondaryColor="rgba(34, 197, 94, 0.1)"/>
           ) : (
             <>
-            <input disabled={uploading} {...getInputProps()} />
+            <input disabled={uploading || isPending || isFetching} {...getInputProps()} />
             <FolderUp className="text-green-400 size-10 group-hover:scale-125 group-hover:text-green-600 duration-200"/>
             </>
           )}

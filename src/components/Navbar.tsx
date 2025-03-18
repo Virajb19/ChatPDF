@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMediaQuery } from 'usehooks-ts'
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, Files} from 'lucide-react'
+import { Menu, X, Files, Loader2} from 'lucide-react'
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Chat } from "@prisma/client";
@@ -74,7 +74,7 @@ useEffect(() => {
             </div>
              <div className="flex items-center gap-4 mr-2 sm:mr-10">
                <ThemeToggle />
-               {isAuth && <UserAccountNav />}
+               {status === 'loading' ? <Loader2 className="size-7 animate-spin"/> : isAuth && <UserAccountNav />}
              </div>
 
             <AnimatePresence>

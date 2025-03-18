@@ -23,12 +23,12 @@ export async function POST(req: NextRequest) {
         if(!parsedData.success) return NextResponse.json({msg: 'Invalid inputs', errors: parsedData.error.flatten().fieldErrors}, {status: 400})
         const {fileName, fileKey} = parsedData.data
 
-        const fileMetaData = await storage.getFile('6782148a002e26893ddb', fileKey.slice(0,15))
+        const fileMetaData = await storage.getFile(process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID!, fileKey.slice(0,15))
         if(!fileMetaData) return NextResponse.json({msg: 'File not found!'}, { status: 404})
 
         const fileSize = fileMetaData.sizeOriginal / ( 1024 * 1024)
         if(fileSize > 5) {
-            await storage.deleteFile('6782148a002e26893ddb', fileKey.slice(0,15))
+            await storage.deleteFile(process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID!, fileKey.slice(0,15))
             return NextResponse.json({ msg: 'File size exceeds 3MB limit'}, { status: 400})
         }
 

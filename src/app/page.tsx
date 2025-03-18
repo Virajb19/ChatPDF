@@ -28,7 +28,7 @@ export default async function HomePage() {
                   </h1>
                  <div id='buttons' className='flex p-1 gap-4 mb:text-sm'>
                  {isAuth && firstChat && <Link href={`/chats/${firstChat.id}`} className='flex gap-2 items-center px-4 py-2 bg-green-700 rounded-lg font-semibold group'>Go to chats<span className='group-hover:translate-x-1.5 duration-200'><ArrowRightToLine /></span></Link>}
-                 {!isPro && <SubscriptionButton isPro={isPro ?? false}/>}
+                 {isAuth && !isPro && <SubscriptionButton isPro={isPro ?? false}/>}
                  </div>
                  <p className='max-w-xl lg:text-2xl mt-2 text-center'>Join millions of <span className='text-green-500 font-bold'>students, researchers and professionals</span> to
                  instantly anwer questions and understand research with AI</p>
