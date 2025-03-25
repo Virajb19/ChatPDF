@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
  
        return NextResponse.json({chats}, { status: 200})
     } catch(err) {
-       console.error(err)
+       console.error('Error getting chats',err)
        return NextResponse.json({msg: 'Internal server error'}, { status: 500})
     }
  }

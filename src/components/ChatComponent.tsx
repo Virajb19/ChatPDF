@@ -19,7 +19,7 @@ type Input = z.infer<typeof createMessageSchema>
 
 export default function ChatComponent({chatID}: {chatID: string}) {
 
-  const {data: initialMessages, isFetching} = useQuery<Message[]>({
+  const {data: initialMessages, isFetching, isError} = useQuery<Message[]>({
     queryKey: ['getMessages', chatID],
     queryFn: async () => {
         try {

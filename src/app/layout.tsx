@@ -3,7 +3,7 @@ import "~/styles/globals.css";
 import { type Metadata } from "next";
 import Providers from "./providers";
 import NextTopLoader from 'nextjs-toploader';
-import { DM_Sans } from 'next/font/google';
+import { DM_Sans, Space_Grotesk } from 'next/font/google';
 import Navbar from "~/components/Navbar";
 
 export const metadata: Metadata = {
@@ -17,11 +17,16 @@ const sans = DM_Sans({
   weight: ['500','800']
 })
 
+const grotesk = Space_Grotesk({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-  <html lang="en" className={sans.className}>
+  <html lang="en" className={grotesk.className}>
       <body>
         <Providers>
           <Navbar />

@@ -15,8 +15,11 @@ export async function downloadFile(fileKey: string) {
    const result = await storage.getFileDownload(process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID!, fileKey.slice(0,15))
 
    const buffer = Buffer.from(result)
-   const fileName = process.cwd() +  `/files/${fileKey}`
 
-   fs.writeFileSync(fileName, buffer)
-   return fileName
+   return buffer
+
+//    const fileName = process.env.NODE_ENV === 'production' ? `/tmp/${fileKey}` : process.cwd() +  `/files/${fileKey}`
+
+//    fs.writeFileSync(fileName, buffer)
+//    return fileName
 }

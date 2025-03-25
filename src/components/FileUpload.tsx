@@ -11,10 +11,15 @@ import { useRouter } from 'nextjs-toploader/app';
 import AnimatedCircularProgressBar from "./ui/animated-circular-progress-bar";
 import { twMerge } from "tailwind-merge";
 import { useSession } from "next-auth/react";
+import { useUploadingState } from "~/lib/store";
 
 export default function FileUpload() {
 
-    const [uploading, setUploading] = useState(false)
+    // const [uploading, setUploading] = useState(false)
+    // Why not create a local uploading state in NewChatButton and pass it down as props to FileUpload 
+    // That will be problematic because we are also importing FileUpload in page.tsx
+    const { uploading, setUploading} = useUploadingState()
+
     const router = useRouter()
 
     const [value,setValue] = useState<number>(0)

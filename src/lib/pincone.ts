@@ -2,6 +2,7 @@
 import { Pinecone } from '@pinecone-database/pinecone';
 import { downloadFile } from './s3-server';
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
+import { WebPDFLoader } from "@langchain/community/document_loaders/web/pdf";
 import { Document, RecursiveCharacterTextSplitter} from '@pinecone-database/doc-splitter'
 import { getEmbeddings } from './embeddings';
 import md5 from 'md5'
@@ -40,10 +41,15 @@ export async function getPineconeClient() {
 
 export async function uploadFileToPinecone(fileKey: string) {
   
-     const fileName = await downloadFile(fileKey)
+  try {
 
-try {
-       const loader = new PDFLoader(fileName as string)
+      //  const fileName = await downloadFile(fileKey)
+
+       const fileBuffer = await downloadFile(fileKey)
+       const fileBlob = new Blob([fileBuffer], { type: 'application/pdf'})
+       
+      //  const loader = new PDFLoader(fileName as string)
+       const loader = new WebPDFLoader(fileBlob, { splitPages: true})
        const pages = (await loader.load()) as PDFDocument[]
        
        const documents = await Promise.all(pages.map(page => prepareDocument(page)))
@@ -56,9 +62,9 @@ try {
       
       await pineconeIndex.namespace(namespace).upsert(vectors as any)
 
-      fs.unlink(fileName, (err) => {
-         if(err) console.error(err)
-      })
+      // fs.unlink(fileName, (err) => {
+      //    if(err) console.error(err)
+      // })
 
 } catch(error) {
         console.error('Error occured while uploading to Pinecone \n' + error)

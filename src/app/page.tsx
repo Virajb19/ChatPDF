@@ -15,7 +15,7 @@ export default async function HomePage() {
 
 //  await new Promise(r => setTimeout(r, 5000))
 
- const firstChat = await db.chat.findFirst({where: {userId: session?.user.id}})
+ const firstChat = session?.user.id ? await db.chat.findFirst({where: {userId: session.user.id}}) : null
 
      return <main className="w-full min-h-screen flex-center relative">
                 <StarsBackground className='-z-10'/>

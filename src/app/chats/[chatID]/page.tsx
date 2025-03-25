@@ -15,9 +15,6 @@ export default async function ChatPage({ params : { chatID }} : { params: { chat
 
   const current_chat = chats.find(chat => chat.id === chatID)
   if(!current_chat) return notFound()
-
-  // console.log(current_chat)
-  // console.log(session)
   
     return <>
        <main className="w-full mb:hidden h-screen flex overflow-hidden">

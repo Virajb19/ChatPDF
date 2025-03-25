@@ -23,6 +23,10 @@
     "plugins": [{ "name": "next" }],
     "incremental": true,
 
+    //  "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+
+
     /* Path Aliases */
     "baseUrl": ".",
     "paths": {

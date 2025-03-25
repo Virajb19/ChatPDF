@@ -7,6 +7,7 @@ import { FaGithub} from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
+import { useLoadingState } from '~/lib/store';
 
 export const DemarcationLine = () => (
     <div className="flex items-center my-4">
@@ -17,7 +18,9 @@ export const DemarcationLine = () => (
   )
 
 export function OAuthButton({label, provider}: {label: string, provider: string}) {
-    const [loading,setLoading] = useState(false)
+    // const [loading,setLoading] = useState(false)
+
+    const { loading, setLoading} = useLoadingState()
     
   return (
     <motion.button
