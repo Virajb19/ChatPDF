@@ -30,7 +30,7 @@ export default function ChatSideBar({chats, chatID} : { chats: Chat[], chatID: s
                {chats.map((chat,i) => {
                 return <motion.button initial={{opacity: 0, y: 7}} animate={{opacity: 1, y: 0}} transition={{delay: i * 0.1, ease: 'easeInOut'}} key={i} onClick={() => router.push(`/chats/${chat.id}`)} 
                 className={twMerge('chats flex items-center gap-3 text-lg font-semibold border rounded-lg p-3 border-gray-800 duration-300', chat.id === chatID ? 'border-transparent bg-[#008000] selected' : 'hover:bg-white/10')}>
-                      <span><MessageCircle /></span>
+                      <span><MessageCircle className='shrink-0'/></span>
                       <p className='text-ellipsis truncate whitespace-nowrap'>{chat.pdfName}</p>
                 </motion.button>
                })}
@@ -48,7 +48,7 @@ export default function ChatSideBar({chats, chatID} : { chats: Chat[], chatID: s
                               <Zap /> Upgrade To Premium
                             </motion.button>
                         </TooltipTrigger>
-                         <TooltipContent className='bg-[#15123e] text-base rounded-sm border-[3px] border-gray-300 text-white font-semibold' sideOffset={10} side='top'>
+                         <TooltipContent className='bg-[#15123e] text-base uppercase rounded-sm border-[3px] border-gray-300 text-white font-semibold' sideOffset={10} side='top'>
                              Access to create 20 chats
                          </TooltipContent>
                      </Tooltip>

@@ -49,7 +49,7 @@ model Chat {
     createdAt DateTime @default(now())
     fileKey String
     userId Int
-    user User @relation(fields: [userId], references: [id])
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
     messages Message[]
 }
 

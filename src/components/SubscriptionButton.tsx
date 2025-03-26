@@ -20,6 +20,7 @@ export default function SubscriptionButton({isPro}: {isPro: boolean}) {
         toast.dismiss(id)
       })
     }} className={twMerge("px-4 py-2 font-semibold bg-black dark:bg-white text-white dark:text-black rounded-lg disabled:cursor-not-allowed disabled:opacity-80")}>
-        {isPro ? "Manage Subscriptions" : "Go to pro !"}
+        {/* {isPro ? "Manage Subscriptions" : "Go to pro !"} */}
+        Upgrade
     </button>
 }

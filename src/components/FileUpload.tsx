@@ -122,7 +122,7 @@ export default function FileUpload() {
           ) : (
             <>
             <input disabled={uploading || isPending || isFetching} {...getInputProps()} />
-            <FolderUp className="text-green-400 size-10 group-hover:scale-125 group-hover:text-green-600 duration-200"/>
+            <FolderUp className="text-green-500 size-10 group-hover:scale-125 group-hover:text-green-600 duration-200"/>
             </>
           )}
             <p className={twMerge("text-lg font-semibold text-gray-400", uploading && 'animate-pulse duration-1000')}>{uploading ? 'uploading your pdf...' :' Drop your PDF here'}</p>
