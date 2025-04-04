@@ -33,7 +33,7 @@ export default async function HomePage() {
                  {isAuth && !isPro && <SubscriptionButton isPro={isPro ?? false}/>}
                  </div>
                  <p className='max-w-xl lg:text-2xl mt-2 text-center'>Join millions of <span className='text-green-500 font-bold'>students, researchers and professionals</span> to
-                 instantly anwer questions and understand research with AI</p>
+                 instantly answer questions and understand research with AI</p>
                  {isAuth ? (
                  <div className='sm:w-[60%] w-[90%] flex flex-col gap-3'>
                         <ProgressSection isPro={isPro} chatCount={chatCount}/>

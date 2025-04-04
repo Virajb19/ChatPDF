@@ -2,7 +2,7 @@
 
 It is an AI chatbot where you can ask questions about a PDF
 
-https://github.com/user-attachments/assets/aeba0cca-5a95-4002-be32-8bc52a0d1067
+https://github.com/user-attachments/assets/722d9cb5-fea1-454d-b5da-2b0661963b72
 
 ## How to run locally ?
 
