@@ -4,6 +4,7 @@ import { useState } from "react"
 import { toast } from "sonner"
 import { twMerge } from "tailwind-merge"
 import { createCheckoutSession } from "~/server/actions"
+import { Zap } from 'lucide-react'
 
 export default function SubscriptionButton({isPro}: {isPro: boolean}) {
 
@@ -19,8 +20,8 @@ export default function SubscriptionButton({isPro}: {isPro: boolean}) {
         setIsLoading(false)
         toast.dismiss(id)
       })
-    }} className={twMerge("px-4 py-2 font-semibold bg-black dark:bg-white text-white dark:text-black rounded-lg disabled:cursor-not-allowed disabled:opacity-80")}>
+    }} className={twMerge("px-4 py-2 flex-center gap-3 font-semibold bg-black dark:bg-white text-white dark:text-black rounded-lg disabled:cursor-not-allowed disabled:opacity-80")}>
         {/* {isPro ? "Manage Subscriptions" : "Go to pro !"} */}
-        Upgrade
+       <Zap className="text-green-600 fill-green-600"/> Upgrade
     </button>
 }
