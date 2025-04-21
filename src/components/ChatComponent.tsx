@@ -1,6 +1,6 @@
 'use client'
 
-import { SendHorizonal, BotMessageSquare } from 'lucide-react'
+import { SendHorizonal, BotMessageSquare, Loader2 } from 'lucide-react'
 import MessageList from './MessageList'
 import { motion } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
@@ -67,7 +67,11 @@ export default function ChatComponent({chatID}: {chatID: string}) {
                                 <input value={input} {...form.register('message')} onChange={handleInputChange} className='input-style grow' placeholder='enter a prompt...'/>
 
                         <motion.button type='submit' disabled={form.formState.isSubmitting || isLoading} whileHover={{scale: 1.01}} whileTap={{scale: 0.9}} className='p-2 group flex-center rounded-xl bg-green-700 '>
-                           <SendHorizonal />
+                           {isLoading ? (
+                               <Loader2 className='animate-spin'/>
+                           ) : (
+                             <SendHorizonal />
+                           )}
                         </motion.button>
 
                    </form>
