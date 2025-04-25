@@ -4,7 +4,7 @@ import { useDropzone } from "react-dropzone"
 import { FolderUp } from 'lucide-react';
 import { toast } from "sonner";
 import { uploadFile } from "~/lib/s3";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from 'axios'
 import { useEffect, useState } from "react";
 import { useRouter } from 'nextjs-toploader/app';
@@ -26,6 +26,8 @@ export default function FileUpload() {
     
     const {data: session, status} = useSession()
     const isPro = session?.user.isPro
+
+    const queryClient = useQueryClient()
 
   useEffect(() => {
      if(!uploading) return
@@ -57,7 +59,8 @@ export default function FileUpload() {
         if(err instanceof AxiosError) {
             toast.error(err.response?.data.msg || 'Something went wrong!!')
         }
-    }
+    },
+    onSettled: () => queryClient.refetchQueries({queryKey: ['getChats']})
  })
 
  const {data: chatCount, isFetching} = useQuery<number>({
