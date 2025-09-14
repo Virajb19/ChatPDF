@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
     }
 
   const result = await streamText({
-      model: google('gemini-1.5-pro'),
+      model: google('gemini-2.0-flash'),
       messages: [prompt, ...convertToCoreMessages(messages)],
       
   })
