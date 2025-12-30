@@ -8,10 +8,14 @@ export async function GET(req: NextRequest, { params }: { params: { chatId: stri
 
         const session = await getServerAuthSession()
         if(!session?.user) return NextResponse.json({msg: 'Unauthorized'}, { status: 401})
+        const userId = session.user.id
 
         const { chatId } = params
 
-        const chat = await db.chat.findUnique({ where: { id: chatId}, select: {id: true}})
+            // Add userId to ensure chat belongs to right user
+            // What if another logged in user copies the chatId of yours and paste /chats/:chatId url in his browser?
+            // He will be able to see your chat
+        const chat = await db.chat.findUnique({ where: { id: chatId, userId}, select: {id: true}})
         if(!chat) return NextResponse.json({msg: 'chat not found'}, { status: 404})
 
         const messages = await db.message.findMany({ where: {chatId}, orderBy: { createdAt: 'asc'}})
@@ -32,7 +36,6 @@ export async function POST(req: NextRequest, { params }: { params: { chatId: str
         if(!parsedData.success) return NextResponse.json({msg: 'Invalid inputs', errors: parsedData.error.flatten().fieldErrors}, { status: 401})
         
         const { message } = parsedData.data
-
 
         const { chatId } = params
 

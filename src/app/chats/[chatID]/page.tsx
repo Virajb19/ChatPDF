@@ -13,6 +13,13 @@ export default async function ChatPage({ params : { chatID }} : { params: { chat
   const chats = await db.chat.findMany({where: {userId: session.user.id}, orderBy: {createdAt: 'asc'}})
   if(!chats) return redirect('/')
 
+  // Add userId to ensure chat belongs to right user
+  // What if another logged in user copies the chatId of yours and paste /chats/:chatId url in his browser?
+  // He will be able to see your chat
+  // Also add this check in API although this is server side 
+  const chat = await db.chat.findUnique({where: {id: chatID, userId: session.user.id}})
+  if(!chat) return notFound()
+
   const current_chat = chats.find(chat => chat.id === chatID)
   if(!current_chat) return notFound()
   
