@@ -30,6 +30,8 @@ export default function SignIn() {
   })
 
   async function onSubmit(data: SignInData) {
+
+    const toastId = toast.loading('Signin you in...', { position: 'bottom-right'})
     
     setLoading(true)
     const res = await signIn('credentials',{...data, redirect: false})
@@ -39,7 +41,8 @@ export default function SignIn() {
        const error = ['User not found. Please check your email !', 'Incorrect password. Try again !!!'].includes(res?.error ?? '') ? res?.error : 'Something went wrong!!!'
        return toast.error(error)
     }
-    toast.success('Login successfull!. Welcome back!')
+    // await new Promise(r => setTimeout(r, 7000))
+    toast.success('Login successfull!. Welcome back!', {id: toastId, position: 'bottom-right'})
     router.push('/')
     router.refresh()
   }

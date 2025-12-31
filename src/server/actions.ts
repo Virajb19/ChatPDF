@@ -23,7 +23,7 @@ export async function signup(formData: formData) {
        const hashedPassword = await bcrypt.hash(password,10)
        await db.user.create({data: {username,email,password: hashedPassword}})
    
-       return {success: true, msg: 'Signed up successfully. Welcome to GitChat !!!'}
+       return {success: true, msg: 'Signed up successfully. Welcome to ChatPDF !!!'}
    } catch(e) {
        console.error('Error while signing up',e)
        return {success: false, msg: 'Something went wrong !!!'}
