@@ -48,8 +48,8 @@ export default function MessageList({messages, isLoading, isFetching} : { messag
                         </div>                 
                      )}
                         <motion.p key={i} initial={{opacity: 0, scale: 0.8}} animate={{opacity:1, scale: 1}} transition={{duration: 0.4, type: 'spring', bounce: 0.4}}
-                           className={twMerge("w-fit mr-2 self-end font-semibold text-left p-2 rounded-lg bg-green-700 max-w-1/2", 
-                           message.role === "assistant" && "self-start mr-10 p-3 rounded-xl bg-accent dark:bg-white/20 border border-gray-600 whitespace-pre-wrap")}>
+                           className={twMerge("w-fit mr-2 self-end font-semibold text-left p-2 rounded-lg rounded-tr-none bg-green-700 max-w-1/2", 
+                           message.role === "assistant" && "self-start mr-10 p-3 rounded-xl rounded-tl-none bg-accent dark:bg-white/20 border border-gray-600 whitespace-pre-wrap")}>
                            {message.content}
                            </motion.p>
                         </div>
