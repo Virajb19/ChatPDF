@@ -20,17 +20,17 @@ export async function signup(formData: formData) {
    // const userExists = await db.user.findFirst({where: {OR: [{email}, {username}]}})
     // if(userExists) return {success: false, msg: 'user already exists'}
 
-    // ENFORCE UNIQUE USERNAME (useDebounceCallback) -> use debouncing
+    // ENFORCE UNIQUE USERNAME (useDebounceCallback) -> use debouncing -> useHooks-ts
     // Also make username a unique field in prisma schema
 
     // OR simply do this
 
-    const usernameExists = await db.user.findUnique({where: {username}})
+    const usernameExists = await db.user.findUnique({where: {username}, select: {id: true}})
     if(usernameExists) return {success: false, msg: 'username already taken', usernameTaken: true}
     
     // IF username is not a unique field in schema
     // Then just use this (verify by email)
-    const userExists = await db.user.findUnique({where: {email}})
+    const userExists = await db.user.findUnique({where: {email}, select: {id: true}})
     if(userExists) return {success: false, msg: 'user already exists with that email'}
    
        const hashedPassword = await bcrypt.hash(password,10)
