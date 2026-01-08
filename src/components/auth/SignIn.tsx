@@ -15,6 +15,8 @@ import Link from 'next/link'
 import { signIn } from 'next-auth/react'
 import { toast } from 'sonner'
 import { useLoadingState } from '~/lib/store'
+import { useSearchParams } from 'next/navigation'
+import { useEffect } from 'react'
 
 type SignInData = z.infer<typeof SignInSchema>
 
@@ -29,6 +31,24 @@ export default function SignIn() {
     defaultValues: { email: '', password: ''}
   })
 
+  const searchParams = useSearchParams()
+
+  // Shows toast twice due to reactStrictMode (will work fine in production)
+  // if you want one toast in dev mode either disable reactStrictMode or use shownRef
+
+  // const shownRef = useRef(false)
+
+  useEffect(() => {
+      // if (shownRef.current) return
+
+      const reason = searchParams.get("reason")
+      if(reason == "auth") {
+          // shownRef.current = true
+          toast.error('You need to signin first')
+          router.replace('/signin')
+      }
+  }, [searchParams])
+
   async function onSubmit(data: SignInData) {
 
     const toastId = toast.loading('Signin you in...', { position: 'bottom-right'})
@@ -37,9 +57,11 @@ export default function SignIn() {
     const res = await signIn('credentials',{...data, redirect: false})
     setLoading(false)
 
-    if(!res?.ok) {
+    if(res?.error || !res?.ok) {
        const error = ['User not found. Please check your email !', 'Incorrect password. Try again !!!'].includes(res?.error ?? '') ? res?.error : 'Something went wrong!!!'
+       toast.dismiss(toastId)
        return toast.error(error)
+      //  return toast.error(error, {id: toastId})
     }
     // await new Promise(r => setTimeout(r, 7000))
     toast.success('Login successfull!. Welcome back!', {id: toastId, position: 'bottom-right'})

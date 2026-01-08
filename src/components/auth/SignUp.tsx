@@ -38,7 +38,21 @@ export default function SignUp() {
     if(res.success) {
       toast.success(res.msg)
       router.push('/signin')
-    } else toast.error(res.msg)
+    } else {
+
+      // I think first show the email already exists error
+        
+        if(res.usernameTaken) {
+           form.setError('username', { message: res.msg} , { shouldFocus: true})
+           return
+        }
+
+        // if(res.emailTaken) {
+        //      form.setError('username', { message: 'Account already exists with this email'} , { shouldFocus: true})
+        //      return 
+        // }
+        toast.error(res.msg)
+    }
 
   }
 

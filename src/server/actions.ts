@@ -16,9 +16,22 @@ export async function signup(formData: formData) {
        const parsedData = SignUpSchema.safeParse(formData)
        if(!parsedData.success) return {success: false, errors: parsedData.error.flatten().fieldErrors, msg: 'Invalid inputs'}
        const {username, email, password} = parsedData.data
-   
-       const userExists = await db.user.findFirst({where: {OR: [{email}, {username}]}})
-       if(userExists) return {success: false, msg: 'user already exists'}
+
+   // const userExists = await db.user.findFirst({where: {OR: [{email}, {username}]}})
+    // if(userExists) return {success: false, msg: 'user already exists'}
+
+    // ENFORCE UNIQUE USERNAME (useDebounceCallback) -> use debouncing
+    // Also make username a unique field in prisma schema
+
+    // OR simply do this
+
+    const usernameExists = await db.user.findUnique({where: {username}})
+    if(usernameExists) return {success: false, msg: 'username already taken', usernameTaken: true}
+    
+    // IF username is not a unique field in schema
+    // Then just use this (verify by email)
+    const userExists = await db.user.findUnique({where: {email}})
+    if(userExists) return {success: false, msg: 'user already exists with that email'}
    
        const hashedPassword = await bcrypt.hash(password,10)
        await db.user.create({data: {username,email,password: hashedPassword}})

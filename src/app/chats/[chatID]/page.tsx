@@ -8,7 +8,7 @@ import { db } from "~/server/db"
 export default async function ChatPage({ params : { chatID }} : { params: { chatID: string}}) {
 
    const session = await getServerAuthSession()
-   if(!session?.user) return redirect('/signin')
+   if(!session?.user) return redirect('/signin?reason=auth')
 
   const chats = await db.chat.findMany({where: {userId: session.user.id}, orderBy: {createdAt: 'asc'}})
   if(!chats) return redirect('/')

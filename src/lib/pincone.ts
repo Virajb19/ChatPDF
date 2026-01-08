@@ -39,6 +39,7 @@ export async function getPineconeClient() {
     return pc
 }
 
+
 export async function uploadFileToPinecone(fileKey: string) {
   
   try {
@@ -46,7 +47,8 @@ export async function uploadFileToPinecone(fileKey: string) {
       //  const fileName = await downloadFile(fileKey)
 
        const fileBuffer = await downloadFile(fileKey)
-       const fileBlob = new Blob([fileBuffer], { type: 'application/pdf'})
+       // Never use 'any' unless really needed
+       const fileBlob = new Blob([fileBuffer as any], { type: 'application/pdf'})
        
       //  const loader = new PDFLoader(fileName as string)
        const loader = new WebPDFLoader(fileBlob, { splitPages: true})

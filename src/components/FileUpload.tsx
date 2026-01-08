@@ -81,6 +81,8 @@ export default function FileUpload() {
     maxFiles: 1,
     onDrop: async (files: File[]) => {
    try {
+
+     // Client side protection for better UX
         if(!isPro && chatCount && chatCount > 7) {
             toast.error('You can only create up to 7 chats. Please upgrade to Pro.')
             return
@@ -91,6 +93,7 @@ export default function FileUpload() {
             return
         }
 
+        // Client side protection for better UX
         const file = files[0]
         if(file && file?.size >= 5 * 1024 * 1024) {
             toast.error('Please upload a file less than 5MB')
@@ -107,6 +110,8 @@ export default function FileUpload() {
         // Reversing the order of uploadFile and createChat will throw an error
         const data = await uploadFile(file) 
         await createChat(data)
+
+        // delete uploaded PDF from s3 bucket if createChat(data) fails or throws error
         
         } catch(err) {
             console.error(err) 

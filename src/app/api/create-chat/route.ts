@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
 
         const chats = await db.chat.count({ where: { userId: user.id}})
         
+        // Server side protection
         if(!user.isPro && chats > 7) return NextResponse.json({msg: 'User without pro can only create 7 chats'}, { status: 403})
 
         if(user.isPro && chats > 20) return NextResponse.json({msg: 'You can not create more than 20 chats'}, { status: 403})
@@ -26,6 +27,7 @@ export async function POST(req: NextRequest) {
         const fileMetaData = await storage.getFile(process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID!, fileKey.slice(0,15))
         if(!fileMetaData) return NextResponse.json({msg: 'File not found!'}, { status: 404})
 
+        // Server side protection
         const fileSize = fileMetaData.sizeOriginal / ( 1024 * 1024)
         if(fileSize > 5) {
             await storage.deleteFile(process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID!, fileKey.slice(0,15))
@@ -36,6 +38,7 @@ export async function POST(req: NextRequest) {
     
         const chat = await db.chat.create({data: {pdfName: fileName, fileKey, pdfURL: fileURL ,userId: user.id}})
 
+        // Can we use transaction here for roll back if Pinecone upload fails
         await uploadFileToPinecone(fileKey)
         // return uploadFileToPinecone(fileKey)
         // .then(() => {

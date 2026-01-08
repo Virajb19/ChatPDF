@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "~/server/db";
-import { streamText, convertToCoreMessages, CoreMessage } from 'ai';
+import { streamText, CoreMessage } from 'ai';
 import { google } from '@ai-sdk/google'
+import { groq } from "@ai-sdk/groq";
 import { getContext } from "~/lib/context";
 import { Message } from "ai";
 import { getServerAuthSession } from "~/server/auth";
-
 
 export async function POST(req: NextRequest) {
 
@@ -53,8 +53,8 @@ export async function POST(req: NextRequest) {
     }
 
   const result = await streamText({
-      model: google('gemini-2.0-flash'),
-      messages: [prompt, ...convertToCoreMessages(messages)],
+      model: groq('llama-3.3-70b-versatile') as any,
+      messages: [prompt, ...messages],
       
   })
 

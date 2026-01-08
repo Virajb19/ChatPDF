@@ -11,7 +11,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { createMessageSchema } from '~/lib/zod'
-import { useChat } from 'ai/react'
+import { useChat } from '@ai-sdk/react'
+import type { Message as UIMessage } from 'ai'
 import { useMemo } from 'react'
 import { saveMessage } from '~/server/actions'
 
@@ -46,15 +47,26 @@ export default function ChatComponent({chatID}: {chatID: string}) {
     defaultValues: { message: ''}
   })
 
-  const { input, handleSubmit, handleInputChange, messages, isLoading} = useChat({ 
+  const onSubmit = async (data: Input) => {
+  await sendMessage({
+    role: 'user',
+    content: data.message,
+  })
+
+  form.reset()
+}
+
+  const { messages, sendMessage, status} = useChat({ 
     api: '/api/chat',
     body: { chatID },
     initialMessages: formattedMessages,
-    onFinish: async (message) => {
+    onFinish: async (message: UIMessage) => {
        const role = message.role === 'assistant' ? 'ASSISTANT' : 'USER'
        await saveMessage(message.content, chatID, role)
     }
  })
+
+ const isLoading = status === 'submitted' || status === 'streaming'
 
     return <div className="flex flex-col gap-2 bg-card sm:border-l-2 border-slate-400 p-1 w-1/3 mb:w-full overflow-hidden">
          <div className='flex items-center gap-3 mb:hidden'>
@@ -62,9 +74,9 @@ export default function ChatComponent({chatID}: {chatID: string}) {
            <h3 className='font-semibold'>Chat</h3>
          </div>
         <MessageList messages={messages ?? []} isLoading={isLoading} isFetching={isFetching}/>
-            <div className='flex items-center gap-3 p-2'>
-                   <form className='flex items-center gap-3 w-full' onSubmit={handleSubmit}>
-                                <input value={input} {...form.register('message')} onChange={handleInputChange} className='input-style grow' placeholder='enter a prompt...'/>
+            <div className='flex items-center gap-3 p-2 sticky bottom-1'>
+                   <form className='flex items-center gap-3 w-full' onSubmit={form.handleSubmit(onSubmit)}>
+                                <input {...form.register('message')} className='input-style grow' placeholder='enter a prompt...'/>
 
                         <motion.button type='submit' disabled={form.formState.isSubmitting || isLoading} whileHover={{scale: 1.01}} whileTap={{scale: 0.9}} className='p-2 group flex-center rounded-xl bg-green-700 '>
                            {isLoading ? (
