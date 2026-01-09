@@ -104,13 +104,13 @@ const { startStreaming, stopStreaming } = useChatStreamStore()
  const messages: UIMessage[] = [...formattedMessages, ...streamedMessages]
  const isLoading = status === 'submitted'
 
-    return <div className="flex flex-col gap-2 bg-card sm:border-l-2 border-slate-400 p-1 w-1/3 mb:w-full overflow-hidden">
+    return <div className="flex flex-col h-full bg-card sm:border-l-2 border-slate-400 p-1 w-1/3 mb:w-full overflow-hidden">
          <div className='flex items-center gap-3 mb:hidden'>
             <BotMessageSquare className='size-7'/>
            <h3 className='font-semibold'>Chat</h3>
          </div>
         <MessageList messages={messages ?? []} isLoading={isLoading} isFetching={isFetching}/>
-            <div className='flex items-center gap-3 p-2 sticky bottom-1'>
+            <div className='flex items-center gap-3 p-2 border-t-[3px] border-slate-600'>
                    <form className='flex items-center gap-3 w-full' onSubmit={form.handleSubmit(onSubmit)}>
                                 <input disabled={form.formState.isSubmitting || isLoading} {...form.register('message')} className='input-style grow disabled:opacity-75' placeholder='enter a prompt...'/>
 

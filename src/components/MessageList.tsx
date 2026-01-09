@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { twMerge } from "tailwind-merge";
 import { UIMessage } from 'ai'
 import { motion } from 'framer-motion'
-import { Bot, User, Loader2 } from 'lucide-react'
+import { Bot, User, Loader2, Loader } from 'lucide-react'
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 
@@ -35,7 +35,7 @@ export default function MessageList({messages, isLoading, isFetching} : { messag
          <Loader2 className="size-12 text-green-600 animate-spin"/>
   </div>
 
-    return <div id="message-container" className="flex flex-col p-2 grow gap-3 max-h-[43rem] mb:h-[calc(90vh-5rem)] overflow-y-scroll text-sm sm:border-t-4 border-slate-500">
+    return <div id="message-container" className="flex-1 flex flex-col p-2 gap-3 mb:h-[calc(90vh-5rem)] overflow-y-scroll text-sm sm:border-t-4 border-slate-500">
              {messages.length === 0 ? (
                <h3 className="self-center my-auto"> Ask Something!</h3>
              ) : (
@@ -64,7 +64,10 @@ export default function MessageList({messages, isLoading, isFetching} : { messag
                {isLoading && (
                    <div className="flex items-center gap-3">
                        <span className="p-2 bg-green-800 rounded-full"> <Bot /> </span>
-                      <p className="italic font-bold text-gray-500 text-lg animate-pulse"> Generating...</p>
+                      {/* <p className="italic font-bold text-gray-500 text-lg animate-pulse"> Generating...</p> */}
+                      <span className="p-2 rounded-xl rounded-tl-none bg-accent dark:bg-white/20 border border-gray-600 whitespace-pre-wrap"> 
+                         <Loader className="size-5 animate-spin" />
+                      </span>
                    </div>
                )}
               <div ref={divRef} />
