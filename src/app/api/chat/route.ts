@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "~/server/db";
 import { streamText, convertToModelMessages } from 'ai'
-import { google } from '@ai-sdk/google'
 import { groq } from "@ai-sdk/groq";
 import { getContext } from "~/lib/context";
 import type { UIMessage } from "ai";
@@ -39,8 +38,6 @@ export async function POST(req: NextRequest) {
 
     const context = await getContext(userText, chat.fileKey)
 
-    // console.log('Context', context)
-
     const prompt = {
       role: 'system' as const,
       content: `AI assistant is a brand new, powerful, human-like artificial intelligence.
@@ -69,7 +66,7 @@ export async function POST(req: NextRequest) {
       assistant will not invent anything that is not drawn directly from the context.
 
       Provide more structured response like when you provide points add number in front of them.
-      Dont say this line -> This information is based on the provided context block.
+      Never mention context block in answer 
       `     
     }
 
@@ -81,8 +78,6 @@ export async function POST(req: NextRequest) {
           await new Promise(r => setTimeout(r, 25))
       }
   })
-
-    // console.log(result)
 
      return result.toUIMessageStreamResponse()
   } catch(error) {

@@ -12,8 +12,9 @@ import { useForm } from 'react-hook-form'
 import { createMessageSchema } from '~/lib/zod'
 import { useChat } from '@ai-sdk/react'
 import type { UIMessage } from 'ai'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { saveMessage } from '~/server/actions'
+import { useChatStreamStore } from '~/lib/store'
 
 type Input = z.infer<typeof createMessageSchema>
 
@@ -60,16 +61,47 @@ export default function ChatComponent({chatID}: {chatID: string}) {
   form.reset()
 }
 
+/**
+ * WHY THIS CHANGE?
+ *
+ * When an AI response is streaming, switching to another chat causes the
+ * in-progress streamed message to be lost from the UI. Since `useChat`
+ * keeps its streaming state locally, navigating away unmounts the component
+ * and the partial assistant message disappears until a full refresh.
+ *
+ * To prevent this UX issue, we introduce a global "isStreaming" state
+ * (via Zustand) and temporarily disable chat switching while streaming
+ * is active. This ensures:
+ *
+ * - Streamed responses are not accidentally lost
+ * - Users do not see inconsistent or missing messages
+ * - Chat navigation behaves predictably during AI generation
+ *
+ * Chat switching is re-enabled once the AI finishes, errors, or aborts.
+ */
+
+const { startStreaming, stopStreaming } = useChatStreamStore()
+
   const { messages: streamedMessages, sendMessage, status} = useChat({ 
     onFinish: async ({ message }) => {
+        stopStreaming()
         const text = getText(message)
         const role = message.role === 'assistant' ? 'ASSISTANT' : 'USER'
         await saveMessage(text, chatID, role)
-    }
+    },
+    onError: () => stopStreaming()
  })
 
- const messages: UIMessage[] = [...formattedMessages, ...streamedMessages]
+ useEffect(() => {
+    if (status === 'submitted' || status === 'streaming') {
+      startStreaming()
+    } else {
+      stopStreaming()
+    }
+}, [status])
 
+
+ const messages: UIMessage[] = [...formattedMessages, ...streamedMessages]
  const isLoading = status === 'submitted'
 
     return <div className="flex flex-col gap-2 bg-card sm:border-l-2 border-slate-400 p-1 w-1/3 mb:w-full overflow-hidden">

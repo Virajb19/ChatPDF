@@ -24,6 +24,18 @@ export const useLoadingState = create<loadingState>((set, get) => ({
      }
 }))
 
+type ChatStreamState = {
+  isStreaming: boolean
+  startStreaming: () => void
+  stopStreaming: () => void
+}
+
+export const useChatStreamStore = create<ChatStreamState>((set) => ({
+  isStreaming: false,
+  startStreaming: () => set({ isStreaming: true }),
+  stopStreaming: () => set({ isStreaming: false }),
+}))
+
 // type useChatStore = {
 //     chatId: string | null,
 //     setChatId: (chatId: string) => void

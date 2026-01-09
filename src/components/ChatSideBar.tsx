@@ -12,12 +12,15 @@ import { createCheckoutSession } from '~/server/actions';
 import NewChatButton from './NewChatButton';
 import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
+import { useChatStreamStore } from '~/lib/store';
 
 export default function ChatSideBar({chats, chatID} : { chats: Chat[], chatID: string}) {
 
   const router = useRouter()
   const { data: session } = useSession()
   const isPro = session?.user.isPro
+
+  const isStreaming = useChatStreamStore(state => state.isStreaming)
 
   useEffect(() => {
      const selectedChat = document.querySelector('.chats.selected') as HTMLButtonElement
@@ -28,7 +31,7 @@ export default function ChatSideBar({chats, chatID} : { chats: Chat[], chatID: s
              <NewChatButton />
              <div id='chats' className='flex flex-col p-1 gap-3 overflow-y-scroll h-[40rem] mb:h-[30rem]'>
                {chats.map((chat,i) => {
-                return <motion.button initial={{opacity: 0, y: 7}} animate={{opacity: 1, y: 0}} transition={{delay: i * 0.1, ease: 'easeInOut'}} key={i} onClick={() => router.push(`/chats/${chat.id}`)} 
+                return <motion.button disabled={isStreaming} initial={{opacity: 0, y: 7}} animate={{opacity: 1, y: 0}} transition={{delay: i * 0.1, ease: 'easeInOut'}} key={i} onClick={() => router.push(`/chats/${chat.id}`)} 
                 className={twMerge('chats flex items-center gap-3 text-lg font-semibold border rounded-lg p-3 border-gray-800 duration-300', chat.id === chatID ? 'border-transparent bg-[#008000] selected' : 'hover:bg-white/10')}>
                       <span><MessageCircle className='shrink-0'/></span>
                       <p className='text-ellipsis truncate whitespace-nowrap'>{chat.pdfName}</p>
