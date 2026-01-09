@@ -1,12 +1,16 @@
 import { useEffect, useRef } from "react";
 import { twMerge } from "tailwind-merge";
-import { Message } from 'ai'
+import { UIMessage } from 'ai'
 import { motion } from 'framer-motion'
 import { Bot, User, Loader2 } from 'lucide-react'
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 
-export default function MessageList({messages, isLoading, isFetching} : { messages: Message[], isLoading: boolean, isFetching: boolean}) {
+function getText(message: UIMessage): string {
+  return message.parts.filter((p): p is { type: 'text'; text: string } => p.type === 'text').map(p => p.text).join('')
+}
+
+export default function MessageList({messages, isLoading, isFetching} : { messages: UIMessage[], isLoading: boolean, isFetching: boolean}) {
 
   const {data: session, status} = useSession()
   const user = session?.user
@@ -50,16 +54,18 @@ export default function MessageList({messages, isLoading, isFetching} : { messag
                         <motion.p key={i} initial={{opacity: 0, scale: 0.8}} animate={{opacity:1, scale: 1}} transition={{duration: 0.4, type: 'spring', bounce: 0.4}}
                            className={twMerge("w-fit mr-2 self-end font-semibold text-left p-2 rounded-lg rounded-tr-none bg-green-700 max-w-1/2", 
                            message.role === "assistant" && "self-start mr-10 p-3 rounded-xl rounded-tl-none bg-accent dark:bg-white/20 border border-gray-600 whitespace-pre-wrap")}>
-                           {message.content}
+                           {/* {message.content} */}
+                               {getText(message)}
                            </motion.p>
                         </div>
                      })}
                 </>
              )}
                {isLoading && (
-                  <p className="italic font-bold text-gray-500 text-lg animate-pulse">
-                     Generating...
-                  </p>
+                   <div className="flex items-center gap-3">
+                       <span className="p-2 bg-green-800 rounded-full"> <Bot /> </span>
+                      <p className="italic font-bold text-gray-500 text-lg animate-pulse"> Generating...</p>
+                   </div>
                )}
               <div ref={divRef} />
         </div>
